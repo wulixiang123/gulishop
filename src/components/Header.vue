@@ -31,13 +31,14 @@
         </router-link>
       </h1>
       <div class="searchArea">
-        <form action="###" class="searchForm">
+        <form action="javascript:;" class="searchForm">
           <input
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
+            v-model="keyword"
           />
-          <button class="sui-btn btn-xlarge btn-danger" type="button">
+          <button class="sui-btn btn-xlarge btn-danger" type="button" @click.prevent="toSearch">
             搜索
           </button>
         </form>
@@ -49,6 +50,26 @@
 <script>
 export default {
   name: "Header",
+  data(){
+    return{
+        keyword:''
+    }
+  },
+  methods:{
+    toSearch(){
+        // this.$route.push(`/search/${ this.keyword }?text=${ this.keyword }`)
+        this.$router.push({
+            // path:'/search',
+            name:"Search",
+            params:{
+                keyword:this.keyword || undefined
+            },
+            query:{
+                text:this.keyword
+            }
+        })
+    }
+  }
 };
 </script>
 
