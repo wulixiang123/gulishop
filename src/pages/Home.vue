@@ -36,7 +36,10 @@ import Floor from './Floor.vue'
 import Brand from './Brand.vue'
 export default {
   components: { TypeNav, ListContainer,Recommend,Rank, Like, Floor, Brand, },
-name:'Home'
+name:'Home',
+mounted(){
+    this.$store.dispatch('getCategoryList')
+}
 }
 </script>
 
