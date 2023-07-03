@@ -75,10 +75,16 @@ export default {
         category2id ? query.category2id = category2id:''
         category3id ? query.category3id = category3id:''
         query.categoryName = categoryname
-        this.$router.push({
-          path:'/search',
+
+        let location = {
+          // path:'/search',
+          name:'Search',
           query
-        })
+        }
+        if(this.$router.push){
+         location.params = this.$route.params 
+        }
+        this.$router.push(location)
       }
     },
 

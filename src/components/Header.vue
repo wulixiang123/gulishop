@@ -57,17 +57,19 @@ export default {
   },
   methods:{
     toSearch(){
+        // 测试带参 - params和query都测试, 把keyword传递过去
         // this.$route.push(`/search/${ this.keyword }?text=${ this.keyword }`)
-        this.$router.push({
-            // path:'/search',
-            name:"Search",
-            params:{
-                keyword:this.keyword || undefined
-            },
-            query:{
-                text:this.keyword
+
+        let location = {
+          name:'Search',
+          params:{
+            keyword:this.keyword || undefined
+          }
+        }
+        if(this.$router.query){
+            location.query = this.$route.query
             }
-        })
+            this.$router.push(location)
     }
   }
 };
