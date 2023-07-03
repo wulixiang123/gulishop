@@ -66,6 +66,7 @@ export default {
             keyword:this.keyword || undefined
           }
         }
+        // 如果路由中带有query参数
         if(this.$router.query){
             location.query = this.$route.query
             }
