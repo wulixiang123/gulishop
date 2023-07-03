@@ -3,21 +3,25 @@
     <div class="container">
       <div class="nav-left" @mouseleave="endShowHandler">
         <h2 class="all" @mouseenter="isShow = true">全部商品分类</h2>
-        <div class="sort" v-if="isShow">
+        <transition>
+          <div class="sort" v-if="isShow" @click="toSearch">
           <div class="all-sort-list2">
-            <div class="item" :class="{item_on:activeIndex == index}" v-for="(c1,index) in categoryList" :key="c1.categoryId" @mouseenter="activeIndex = index" @mouseleave="activeIndex = -1">
+            <div class="item" :class="{item_on:activeIndex == index}" v-for="(c1,index) in categoryList" :key="c1.categoryId" @mouseenter="mouseItemHandler(index)" @mouseleave="activeIndex = -1">
               <h3>
-                <a href="">{{ c1.categoryName }}</a>
+                <a href="javascript:;" :data-category1Id="c1.categoryId" :data-categoryName="c1.categoryName">{{ c1.categoryName }}</a>
+                <!-- <a href="">{{ c1.categoryName }}</a> -->
               </h3>
               <div class="item-list clearfix" v-show="activeIndex == index">
                 <div class="subitem">
                   <dl class="fore" v-for="c2 in c1.categoryChild" :key="c2.categoryId">
                     <dt>
-                      <a href="">{{ c2.categoryName }}</a>
+                      <a href="javascript:;" :data-category2Id="c2.categoryId" :data-categoryName="c2.categoryName">{{ c2.categoryName }}</a>
+                      <!-- <a href="">{{ c2.categoryName }}</a> -->
                     </dt>
                     <dd>
                       <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
-                        <a href="">{{ c3.categoryName }}</a>
+                        <a href="javascript:;" :data-category3Id="c3.categoryId" :data-categoryName="c3.categoryName">{{ c3.categoryName }}</a>
+                        <!-- <a href="">{{ c3.categoryName }}</a> -->
                       </em>
                     </dd>
                   </dl>
@@ -26,6 +30,8 @@
             </div>
           </div>
         </div>
+        </transition>
+        
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -43,6 +49,7 @@
 
 <script>
 import { mapState, } from 'vuex'
+import _ from 'lodash'
 export default {
   name: "TypeNav",
   data(){
@@ -57,11 +64,36 @@ export default {
     }
   },
   methods:{
+
+    toSearch(e){
+      console.dir(e.target);
+      console.log(e.target.dataset);
+      if(e.target.nodeName == 'A'){
+        const {category1id,category2id,category3id,categoryname}=e.target.dataset
+        let query = {}
+        category1id ? query.category1id = category1id:''
+        category2id ? query.category2id = category2id:''
+        category3id ? query.category3id = category3id:''
+        query.categoryName = categoryname
+        this.$router.push({
+          path:'/search',
+          query
+        })
+      }
+    },
+
     endShowHandler(){
       if(this.$route.path !== '/home'){
         this.isShow = false
       }
-    }
+    },
+    mouseItemHandler:_.throttle(function(index){
+      this.activeIndex = index
+      // console.log(index);
+    },20,{
+      leading:true,
+      trailing:false
+    })
   },
   computed:{
     ...mapState({
@@ -191,6 +223,17 @@ export default {
           }
         }
       }
+    }
+    .v-enter{
+      height: 0;
+      opacity: 0;
+    }
+    .v-enter-to{
+      height: 461px;
+      opacity: 1;
+    }
+    .v-enter-active{
+      transition: all 0.5s;
     }
   }
 }
