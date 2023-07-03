@@ -10,9 +10,9 @@
 <script>
 export default {
 name:'Search',
-mounted(){
-  this.$store.dispatch('getCategoryList')
-}
+// mounted(){
+//   this.$store.dispatch('getCategoryList')
+// }
 }
 </script>
 

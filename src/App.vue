@@ -24,7 +24,10 @@ import Footer from './components/Footer.vue'
 import Header from './components/Header.vue'
 export default {
   components: { Footer, Header },
-name:'App'
+name:'App',
+mounted(){
+    this.$store.dispatch('getCategoryList')
+}
 }
 </script>
 
