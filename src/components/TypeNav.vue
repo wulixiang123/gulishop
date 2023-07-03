@@ -1,15 +1,15 @@
 <template>
   <div class="type-nav">
     <div class="container">
-      <div class="nav-left">
-        <h2 class="all">全部商品分类</h2>
-        <div class="sort">
+      <div class="nav-left" @mouseleave="endShowHandler">
+        <h2 class="all" @mouseenter="isShow = true">全部商品分类</h2>
+        <div class="sort" v-if="isShow">
           <div class="all-sort-list2">
-            <div class="item" v-for="c1 in categoryList" :key="c1.categoryId">
+            <div class="item" :class="{item_on:activeIndex == index}" v-for="(c1,index) in categoryList" :key="c1.categoryId" @mouseenter="activeIndex = index" @mouseleave="activeIndex = -1">
               <h3>
                 <a href="">{{ c1.categoryName }}</a>
               </h3>
-              <div class="item-list clearfix">
+              <div class="item-list clearfix" v-show="activeIndex == index">
                 <div class="subitem">
                   <dl class="fore" v-for="c2 in c1.categoryChild" :key="c2.categoryId">
                     <dt>
@@ -45,6 +45,24 @@
 import { mapState, } from 'vuex'
 export default {
   name: "TypeNav",
+  data(){
+    return{
+      activeIndex:-1,
+      isShow:true//默认首页展示
+    }
+  },
+  mounted(){
+    if(this.$route.path !== '/home'){
+      this.isShow = false
+    }
+  },
+  methods:{
+    endShowHandler(){
+      if(this.$route.path !== '/home'){
+        this.isShow = false
+      }
+    }
+  },
   computed:{
     ...mapState({
       categoryList:state => state.home.categoryList
@@ -91,7 +109,7 @@ export default {
       width: 210px;
       height: 461px;
       position: absolute;
-      background: #fafafa;
+      background: #f64d44;
       z-index: 999;
 
       .all-sort-list2 {
@@ -110,7 +128,7 @@ export default {
           }
 
           .item-list {
-            display: none;
+            // display: none;
             position: absolute;
             width: 734px;
             min-height: 460px;
@@ -163,10 +181,13 @@ export default {
             }
           }
 
-          &:hover {
-            .item-list {
-              display: block;
-            }
+          // &:hover {
+          //   .item-list {
+          //     display: block;
+          //   }
+          // }
+          &.item_on {
+            background: #f87d77;
           }
         }
       }
