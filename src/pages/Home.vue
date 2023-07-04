@@ -55,13 +55,25 @@
 //    3. 三连环
 //    4. 在页面mounted的时候调用actions
 //    5. 拿state中的数据在页面上进行展示
-import ListContainer from './ListContainer.vue'
-import TypeNav from '../components/TypeNav.vue'
-import Recommend from './Recommend.vue'
-import Rank from './Rank.vue'
-import Like from './Like.vue'
-import Floor from './Floor.vue'
-import Brand from './Brand.vue'
+
+// import ListContainer from './ListContainer.vue'
+// import TypeNav from '../components/TypeNav.vue'
+// import Recommend from './Recommend.vue'
+// import Rank from './Rank.vue'
+// import Like from './Like.vue'
+// import Floor from './Floor.vue'
+// import Brand from './Brand.vue'
+
+
+// 路由懒加载
+const ListContainer = ()=>import('./ListContainer.vue')
+const TypeNav = ()=>import('../components/TypeNav.vue')
+const Recommend = ()=>import('./Recommend.vue')
+const Rank = ()=>import('./Rank.vue')
+const Like = ()=>import('./Like.vue')
+const Floor = ()=>import('./Floor.vue')
+const Brand = ()=>import('./Brand.vue')
+
 import {mapState} from 'vuex'
 export default {
   components: { TypeNav, ListContainer,Recommend,Rank, Like, Floor, Brand, },

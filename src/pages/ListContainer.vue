@@ -8,7 +8,6 @@
             <div class="swiper-slide"
             v-for="(banner,index) in bannerList"
             :key="banner.id"
-            v-if="index < 1"
             >
               <img :src="banner.imgUrl" />
             </div>
@@ -104,11 +103,82 @@
 </template>
 
 <script>
+// swiper轮播图步骤
+// 1. 安装
+//    npm i swiper@6
+// 2. 引入
+//    需要引入 swiper-bundle.min.js 和 swiper-bundle.min.css
+// 引入的是不是我们需要的js文件?
+// import Swiper from 'swiper' --> 这个引入的不是我们想要的文件
+// 找node_modules下的swiper包,这个包下的package.json中配置的main属性,就是默认引入的文件
+// 我们查看之后发现 main: "swiper.cjs.js" 不是官网告诉我们的 swiper-bundle.min.js
+// 所以我们需要单独自己引入
+import Swiper from 'swiper/swiper-bundle.min.js'
+import 'swiper/swiper-bundle.min.css'
+// 3. 准备DOM
+//    已存在,不需要我们自己写
+// 4. 初始化实例
+//    在挂载完之后才能获取到DOM结构
+// 遇到的问题:
+// 只要页面改动一点点保存,轮播图就好使,但是刷新就是不好使
+// 原因: 因为发请求是异步的,当调用 this.$store.dispatch('getBannerList') 此时去发请求
+//      发完请求,请求是异步,数据还没有回来的时候调用的 this.initSwiper()
+//      此时去初始化swiper实例了, 而初始化swiper实例的时候需要DOM结构
+//      数据没回来,DOM渲染不完全
+//      等数据来之后,渲染DOM完成之后,已经创建了swiper实例,所以不好使
+// 解决方案:
+// 1. 定时器:
+//    setTimeout(() => {
+//      this.initSwiper()
+//    }, 500)
+//    问题: 不确定请求什么时候回来
+// 2. updated
+//    问题: 只要数据变化都会执行 updated
+// 3. watch + $nextTick
+//    watch监听保证数据回来
+//    数据回来之后,要更新页面,更新页面是异步的,我们需要等待页面的更新完毕之后再调用 initSwiper
+//    此时需要等待DOM的更新,
+//    $nextTick  -->  在修改数据之后立即使用它，然后等待 DOM 更新
 import { mapState } from 'vuex';
 export default {
   name: "ListContainer",
+  data(){
+    return {
+      mySwiper:null
+    }
+  },
   mounted(){
     this.$store.dispatch('getBannerList')
+   
+  },
+  watch:{
+    bannerList:{
+      handler(navl){
+        if(navl && navl.length){
+          this.$nextTick(()=>{
+            this.initSwiper()
+          })
+        }
+      }
+    }
+  },
+  methods:{
+    initSwiper(){
+      this.mySwiper = new Swiper('.swiper-container',{
+        loop:true,//循环模式选项
+        // 如果需要分页器
+        pagination:{
+          el:'.swiper-pagination'
+        },
+        pagination:{
+          el:'.swiper-pagination',
+        },
+        navigation:{
+          nextEl:'.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        }
+      })
+    }
   },
   computed:{
     ...mapState({

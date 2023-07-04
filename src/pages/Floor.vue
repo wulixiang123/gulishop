@@ -5,8 +5,8 @@
         <h3 class="fl">{{ floor.name }}</h3>
         <div class="fr">
           <ul class="nav-tabs clearfix">
-            <li class="active" v-for="(nav,index) in floor.navList" :key="index">
-              <a href="javascript:;" data-toggle="tab">{{ nav.text }}</a>
+            <li :class="{active:activeIndex == index}" v-for="(nav,index) in floor.navList" :key="index">
+              <a href="javascript:;" data-toggle="tab" @click="activeIndex = index">{{ nav.text }}</a>
             </li>
           </ul>
         </div>
@@ -79,7 +79,12 @@
 <script>
 export default {
   name: "Floor",
-  props:['floor']
+  props:['floor'],
+  data(){
+    return{
+      activeIndex:0
+    }
+  }
 };
 </script>
 
