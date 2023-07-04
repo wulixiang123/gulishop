@@ -3,7 +3,31 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <swiper-list :list="bannerList"></swiper-list>
+        <div class="swiper-container" id="mySwiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"
+            v-for="(banner,index) in bannerList"
+            :key="banner.id"
+            >
+              <img :src="banner.imgUrl" />
+            </div>
+            <!-- <div class="swiper-slide">
+              <img src="../components//images//banner2.jpg" />
+            </div>
+            <div class="swiper-slide">
+              <img src="../components//images//banner3.jpg" />
+            </div>
+            <div class="swiper-slide">
+              <img src="../components//images//banner4.jpg" /> -->
+            <!-- </div> -->
+          </div>
+          <!-- 如果需要分页器 -->
+          <div class="swiper-pagination"></div>
+
+          <!-- 如果需要导航按钮 -->
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
       </div>
       <div class="right">
         <div class="news">
@@ -89,8 +113,8 @@
 // 找node_modules下的swiper包,这个包下的package.json中配置的main属性,就是默认引入的文件
 // 我们查看之后发现 main: "swiper.cjs.js" 不是官网告诉我们的 swiper-bundle.min.js
 // 所以我们需要单独自己引入
-// import Swiper from 'swiper/swiper-bundle.min.js'
-// import 'swiper/swiper-bundle.min.css'
+import Swiper from 'swiper/swiper-bundle.min.js'
+import 'swiper/swiper-bundle.min.css'
 // 3. 准备DOM
 //    已存在,不需要我们自己写
 // 4. 初始化实例
@@ -116,48 +140,46 @@
 //    此时需要等待DOM的更新,
 //    $nextTick  -->  在修改数据之后立即使用它，然后等待 DOM 更新
 import { mapState } from 'vuex';
-import SwiperList from '../components/SwiperList.vue';
 export default {
-  components: { SwiperList },
   name: "ListContainer",
-  // data(){
-  //   return {
-  //     mySwiper:null
-  //   }
-  // },
+  data(){
+    return {
+      mySwiper:null
+    }
+  },
   mounted(){
     this.$store.dispatch('getBannerList')
    
   },
-  // watch:{
-  //   bannerList:{
-  //     handler(navl){
-  //       if(navl && navl.length){
-  //         this.$nextTick(()=>{
-  //           this.initSwiper()
-  //         })
-  //       }
-  //     }
-  //   }
-  // },
-  // methods:{
-  //   initSwiper(){
-  //     this.mySwiper = new Swiper('.swiper-container',{
-  //       loop:true,//循环模式选项
-  //       // 如果需要分页器
-  //       pagination:{
-  //         el:'.swiper-pagination'
-  //       },
-  //       pagination:{
-  //         el:'.swiper-pagination',
-  //       },
-  //       navigation:{
-  //         nextEl:'.swiper-button-next',
-  //         prevEl: '.swiper-button-prev',
-  //       }
-  //     })
-  //   }
-  // },
+  watch:{
+    bannerList:{
+      handler(navl){
+        if(navl && navl.length){
+          this.$nextTick(()=>{
+            this.initSwiper()
+          })
+        }
+      }
+    }
+  },
+  methods:{
+    initSwiper(){
+      this.mySwiper = new Swiper('.swiper-container',{
+        loop:true,//循环模式选项
+        // 如果需要分页器
+        pagination:{
+          el:'.swiper-pagination'
+        },
+        pagination:{
+          el:'.swiper-pagination',
+        },
+        navigation:{
+          nextEl:'.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        }
+      })
+    }
+  },
   computed:{
     ...mapState({
       bannerList:state => state.home.bannerList

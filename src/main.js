@@ -9,6 +9,9 @@ Vue.config.productionTip = false
 import TypeNav from '@/components/TypeNav.vue'
 Vue.component( TypeNav.name,TypeNav)
 
+import SwiperList from '@/components/SwiperList.vue'
+Vue.component(SwiperList.name,SwiperList)
+
 
 new Vue({
   router,
