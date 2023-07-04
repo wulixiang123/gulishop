@@ -10,3 +10,7 @@ export const reqCategoryList = () => {
 export const reqBannerList = () => {
     return mockRequest.get('/getBannerList')
 }
+
+export const reqFloorList = () => {
+    return mockRequest.get('getFloorList')
+}

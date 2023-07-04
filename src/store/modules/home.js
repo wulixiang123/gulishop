@@ -1,8 +1,9 @@
-import { reqCategoryList,reqBannerList  } from "@/api"
+import { reqCategoryList,reqBannerList,reqFloorList  } from "@/api"
 
 const state = {
     categoryList:[],
-    bannerList:[]// 存轮播的数据
+    bannerList:[],// 存轮播的数据
+    floorList:[]
 }
 const mutations = {
     SET_CATEGORYLIST(state,categoryList){
@@ -10,6 +11,9 @@ const mutations = {
     },
     SET_BANNERLIST(state,bannerList){
         state.bannerList = bannerList
+    },
+    SET_FLOORLIST(state,floorList){
+        state.floorList = floorList
     }
 }
 const actions = {
@@ -25,6 +29,14 @@ const actions = {
         try{
             let res = await reqBannerList()
             commit('SET_BANNERLIST',res.data)
+        }catch(e){
+            console.error(e);
+        }
+    },
+    async getFloorList({commit}){
+        try{
+            let res = await reqFloorList()
+            commit('SET_FLOORLIST',res.data)
         }catch(e){
             console.error(e);
         }
