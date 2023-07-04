@@ -1,7 +1,11 @@
+// 1. 下载安装
+//    npm i vue-router@3
+// 2. 引入使用
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
+// 解决编程式导航 $router.push() 重复跳转的问题
 const orginPush = VueRouter.prototype.push // 存一下原来push地址
 VueRouter.prototype.push = function (location) {
   orginPush.call(this, location).catch(() => {})
