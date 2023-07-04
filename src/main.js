@@ -31,3 +31,15 @@ mockRequest.get('/getUserinfo').then(res=>{
 }).catch(e=>{
   console.log(e);
 })
+// import mockRequest from '@/utils/mockRequest'
+mockRequest.get('/getBannerList').then(res=>{
+  console.log(res);
+}).catch(e=>{
+  console.log(e);
+})
+// import mockRequest from '@/utils/mockRequest'
+mockRequest.get('/getFloorList').then(res=>{
+  console.log(res);
+}).catch(e=>{
+  console.log(e);
+})
