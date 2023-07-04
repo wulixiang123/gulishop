@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import '@/mock'
 
 Vue.config.productionTip = false
 // 全局注册
@@ -23,3 +24,10 @@ new Vue({
 // }).catch(e=>{
 //   console.log({e});
 // })
+
+import mockRequest from '@/utils/mockRequest'
+mockRequest.get('/getUserinfo').then(res=>{
+  console.log(res);
+}).catch(e=>{
+  console.log(e);
+})
