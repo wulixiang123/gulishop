@@ -6,11 +6,13 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import home from './modules/home'
+import search from "./modules/search";
 // 3. 创建并暴露
 export default new Vuex.Store({
     // 模块化
     modules:{
-        home
+        home,
+        search
     }
 })
 // 4. 在创建vm实例的时候,进行关联(main.js)

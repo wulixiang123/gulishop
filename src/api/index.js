@@ -10,7 +10,12 @@ export const reqCategoryList = () => {
 export const reqBannerList = () => {
     return mockRequest.get('/getBannerList')
 }
-
+// 获取floor数据
 export const reqFloorList = () => {
     return mockRequest.get('getFloorList')
+}
+
+// 获取search数据
+export const reqSearchPage = (params={}) => {
+    return request.post('/list',params)
 }

@@ -154,11 +154,18 @@
 // 3. 交互
 // import SearchSelector from "./SearchSelector";
 import SearchSelector from './SearchSelector.vue';
+import {mapActions} from 'vuex'
 export default {
   name: "Search",
   components: {
     SearchSelector
   },
+  mounted(){
+    this.getSearchData()
+  },
+  methods:{
+    ...mapActions('search',['getSearchData'])
+  }
 };
 </script>
 
