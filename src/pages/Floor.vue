@@ -24,29 +24,7 @@
               <img :src="floor.imgUrl" />
             </div>
             <div class="floorBanner">
-              <div class="swiper-container" id="floor1Swiper">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide"
-                  v-for="(carousel,index) in floor.carouselList"
-                  :key="carousel.id"
-                  v-if="index<1"
-                  >
-                    <img :src="carousel.imgUrl" />
-                  </div>
-                  <!-- <div class="swiper-slide">
-                    <img src="../components//images//floor-1-b02.png" />
-                  </div>
-                  <div class="swiper-slide">
-                    <img src="../components//images//floor-1-b03.png" />
-                  </div> -->
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
-
-                <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-              </div>
+              <swiper-list :list="floor.carouselList"></swiper-list>
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
@@ -77,7 +55,9 @@
 </template>
 
 <script>
+import SwiperList from '../components/SwiperList.vue';
 export default {
+  components: { SwiperList },
   name: "Floor",
   props:['floor'],
   data(){

@@ -72,7 +72,8 @@ watch:{
             this.initSwiper()
           })
         }
-      }
+      },
+      immediate:true
     }
   },
   methods:{
