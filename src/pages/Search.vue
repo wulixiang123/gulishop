@@ -53,27 +53,28 @@
           <!-- 商品列表 -->
           <div class="goods-list">
             <ul class="yui3-g">
-              <li class="yui3-u-1-5">
+              <li class="yui3-u-1-5"
+              v
+              v-for="goods in goodsList"
+              :key="goods.id"
+              >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img src="../components//images//mobile01.png"
+                    <a href="javascript:;" target="_blank"
+                      ><img :src="goods.defaultImg"
                     /></a>
                   </div>
                   <div class="price">
                     <strong>
-                      <em>¥</em>
-                      <i>6088.00</i>
+                      <em>¥ </em>
+                      <i>{{ goods.price.toFixed(2) }}</i>
                     </strong>
                   </div>
                   <div class="attr">
                     <a
                       target="_blank"
-                      href="item.html"
-                      title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >Apple苹果iPhone 6s (A1699)Apple苹果iPhone 6s
-                      (A1699)Apple苹果iPhone 6s (A1699)Apple苹果iPhone 6s
-                      (A1699)</a
+                      href="javascript:;"
+                      >{{ goods.title }}</a
                     >
                   </div>
                   <div class="commit">
@@ -154,11 +155,14 @@
 // 3. 交互
 // import SearchSelector from "./SearchSelector";
 import SearchSelector from './SearchSelector.vue';
-import {mapActions} from 'vuex'
+import {mapActions,mapGetters} from 'vuex'
 export default {
   name: "Search",
   components: {
     SearchSelector
+  },
+  computed:{
+    ...mapGetters('search',['goodsList'])
   },
   mounted(){
     this.getSearchData()

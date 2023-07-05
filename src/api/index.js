@@ -16,6 +16,6 @@ export const reqFloorList = () => {
 }
 
 // 获取search数据
-export const reqSearchPage = (params={}) => {
-    return request.post('/list',params)
+export const reqSearchPage = (data={}) => {
+    return request.post('/list',data)
 }
