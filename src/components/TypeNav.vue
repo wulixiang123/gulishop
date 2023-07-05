@@ -164,7 +164,13 @@ export default {
         if(this.$router.params){
          location.params = this.$route.params 
         }
-        this.$router.push(location)
+        
+        // 首页要历史记录,搜索页不要历史记录
+        if(this.$route.path == '/home'){
+          this.$router.push(location)
+        }else{
+          this.$router.replace(location)
+        }
       }
     },
     // 鼠标移出隐藏sort

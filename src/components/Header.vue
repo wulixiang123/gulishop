@@ -70,7 +70,13 @@ export default {
         if(this.$router.query){
             location.query = this.$route.query
             }
-            this.$router.push(location)
+            
+        // 首页要历史记录,搜索页不要历史记录
+        if(this.$route.path == '/home'){
+          this.$router.push(location)
+        }else{
+          this.$router.replace(location)
+        }
     }
   }
 };
