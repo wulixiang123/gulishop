@@ -12,6 +12,9 @@ Vue.component( TypeNav.name,TypeNav)
 import SwiperList from '@/components/SwiperList.vue'
 Vue.component(SwiperList.name,SwiperList)
 
+import Pagination from '@/components/Pagination'
+Vue.component(Pagination.name,Pagination)
+
 
 new Vue({
   router,

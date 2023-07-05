@@ -45,10 +45,20 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="searchParams.order.split(':')[0] == '1' && 'active'">
+                  <a href="javascript:;" @click="orderHandler(1)">
+                    <span>综合</span>
+                    <span
+                    v-if="searchParams.order.split(':')[0] == '1'"
+                    class="iconfont"
+                    :class="{
+                      'icon-jiantou_xiangxia':searchParams.order.split(':')[1] == 'desc',
+                      'icon-jiantou_xiangshang':searchParams.order.split(':')[1] == 'asc'
+                    }"
+                    ></span>
+                  </a>
                 </li>
-                <li>
+                <!-- <li>
                   <a href="#">销量</a>
                 </li>
                 <li>
@@ -59,9 +69,22 @@
                 </li>
                 <li>
                   <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                </li> -->
+                <li :class="{
+                  active:searchParams.order.split(':')[0] == '2'
+                }">
+                  <a href="javascript:;" @click="orderHandler(2)">
+                    <span>价格</span>
+                  <span
+                  v-if="searchParams.order.split(':')[0] == '2'"
+                  class="iconfont"
+                  :class="{
+                    'icon-jiantou_xiangshang':searchParams.order.split(':')[1] == 'desc',
+                    'icon-jiantou_xiangxia':searchParams.order.split(':')[1] == 'asc'
+                  }"
+                  ></span>
+                  </a>
+                  
                 </li>
               </ul>
             </div>
@@ -112,7 +135,8 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <div class="fr page">
+          <pagination></pagination>
+          <!-- <div class="fr page">
             <div class="sui-pagination clearfix">
               <ul>
                 <li class="prev disabled">
@@ -140,7 +164,7 @@
               </ul>
               <div><span>共10页&nbsp;</span></div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -151,34 +175,92 @@
 // 写页面步骤
 // 1. 搭建静态(直接把组件粘贴过来-去"静态组件"文件夹中去找)
 // 2. 初始化数据展示
-//    先看一下线上的请求,把请求整明白之后,写代码(正常情况下应该去看接口文档)
-//    请求:
-//      
-//      {
-//        "category1Id": "2",
-//        "categoryName": "手机",
-//        "keyword": "aa", // 搜索框数据
-//        "trademark": "", // 实例: "2:小米"  2是品牌ID  小米是品牌名称
-//        "props": [], // 商品属性
-//        "order": "1:desc", //  1是综合 2是价格  asc是升序 desc降序
-//        "pageNo": 1, // 当前页
-//        "pageSize": 2, // 每页条数
-//      }
 //    2.1 api准备
 //    2.2 三连环
 //    2.3 mounted调用接口拿数据
+//        注意: 发请求的时候,一定要有一个参数,空对象也行,否则后端不给数据
 //    2.4 展示数据
+// 问题: 想要显示 goodsList.length 会报错,因为数据还没回来,此时state中的searchData是空对象
+//      searchData.goodsList是undefined,  那么页面computed映射过来的goodsList也是und
+//      goodsList.length  就相当于是 undefined.length 所以报错
+//      问:  a.b 会有几种情况?(面试题)
+//      a如果是Number类型 --> 点任何内容的时候,会转成包装对象,然后去点一个属性 -->  如果有b这个属性,就是b这个属性,没有就是und
+//      a如果是Boolean类型 -->点任何内容的时候,会转成包装对象,然后去点一个属性 -->  如果有b这个属性,就是b这个属性,没有就是und
+//      a如果是String类型 --> 点任何内容的时候,会转成包装对象,然后去点一个属性 -->  如果有b这个属性,就是b这个属性,没有就是und
+//      a如果是undefined  ->  报错
+//      a如果是null       ->  报错
+//      a如果是对象 -> 如果有b属性则就是这个属性,如果没有就是und
+//      a如果是数组 -> 如果有b属性则就是这个属性,如果没有就是und
+//      a如果是函数 -> 如果有b属性则就是这个属性,如果没有就是und
 // 3. 交互
-// import SearchSelector from "./SearchSelector";
+// 需要先知道参数的意义,然后再写交互
+//    先看一下线上的请求,把请求整明白之后,写代码(正常情况下应该去看接口文档)
+//    请求:
+//      {
+//        "category1Id": "2",   ---> 三级分类
+//        "categoryName": "手机",  --->  三级分类
+//        "keyword": "aa", --->  搜索框数据
+//        "trademark": "", --->  品牌   实例: "2:小米"  2是品牌ID  小米是品牌名称
+//        "props": [], ---> 平台属性筛选
+//        "order": "1:desc", ---> 排序  1是综合 2是价格  asc是升序 desc降序
+//        "pageNo": 1, // 当前页  --> 翻页
+//        "pageSize": 2, // 每页条数
+//      }
+//    3.1 三级分类的点击
+//        点击三级分类,通过事件委派改变的是路由参数,只要路由的query参数发生变化,那么一定是点击了三级分类
+//        watch监听路由,当路由的参数发生变化的时候,发请求
+//        面包屑交互
+//        判断searchParmas中有没有参数,有就展示,没有就隐藏
+//        删除面包屑 -->  重新跳转当前要全面,把query参数干掉,重新去组装数据,发送请求
+//    3.2 搜索点击
+//        组装数据
+//        发送请求
+//        由于这个过程和3.1几乎一模一样,所以直接再3.1的代码中加上 搜索的组装数据、发送请求的代码
+//        面包屑(也是一样)
+//    3.3 品牌点击
+//        品牌在 SearchSelector 组件中,当点击品牌的时候需要组装数据,发送请求
+//        组装的数据是在 Search 组件中的 searchParams
+//        子组件修改父组件数据用 自定义事件,改完发请求,拿数据即可,重新渲染页面
+//        面包屑
+//        判断 searchParmas 中  trademark 字段有没有值,有值展示
+//        点击删除 - 组装数据(searchParams.trademark 删除)、发送请求
+//    3.4 平台属性筛选
+//        在 SearchSelector 当中,组装数据、发送请求
+//        修改Search组件的 searchParams.props，用自定义事件
+//    3.5 优化:
+//        需求: 在search页,点击后退,必须后退到home页
+//        思路: 首页跳转搜索页,要历史记录
+//              在搜索页内部跳转的不能有历史记录
+//              1. 三级分类  -  点击就会跳转页面,目前跳转使用的是push
+//                   可以在首页点击    ----    push
+//                   可以在搜索页点击  ----    replace
+//              2. header  --  点击搜索就会跳转页面.目前跳转使用的是push
+//                   可以在首页点击    ----    点击的时候使用push
+//                   可以在搜索页点击  ----    点击的时候使用replace
+//              3. 点击 删除三级分类 和 删除搜索 面包屑,都是通过重新跳转到当前页面做的
+//                  删除三级分类 --  重新跳转到当前页,把query参数去掉
+//                  删除搜索     --  重新跳转到当前页,把params参数去掉
+//                  现在目前重新跳转用的push,应该没有历史记录,用replace
+//    3.6 排序
+//        先把数据整理清楚,在展示页面
+//        3.6.1 数据层
+//            默认发请求的时候,就携带的参数  "1:desc"  1代表综合 2代表价格 desc代表降序 asc代表升序
+//            总共就4中排列组合  "1:desc"综合降序  "1:asc"综合升序   "2:desc"价格降序   "2:asc"价格升序
+//            
+//        3.6.2 展示层
+//    3.7 翻页
 import SearchSelector from './SearchSelector.vue';
 import {mapActions,mapGetters} from 'vuex'
+import Pagination from '../components/Pagination.vue';
 export default {
   name: "Search",
   components: {
-    SearchSelector
+    SearchSelector,
+    Pagination
   },
   data(){
     return{
+      // 发请求携带的参数
       searchParams:{
         category1Id: '',
         category2Id: '',
@@ -189,7 +271,7 @@ export default {
         props: [], // 平台属性
         order: '1:desc',  // 默认 "1:desc" 综合:降序
         pageNo: 1,
-        pageSize: 10
+        pageSize: 2
       }
     }
   },
@@ -206,9 +288,6 @@ export default {
       deep:true
     }
   },
-  // mounted(){
-  //   this.getSearchData()
-  // },
   methods:{
     ...mapActions('search',['getSearchData']),
     // 三级分类组装数据
@@ -274,6 +353,22 @@ export default {
       // 组装数据
       this.searchParams.props.splice(index,1)
       // 发送请求
+      this.getSearchData(this.searchParams)
+    },
+    // 点击排序
+    orderHandler(type){
+      let text = ''
+      let [orderType,orderRank] = this.searchParams.order.split(':')
+      if(type == orderType){
+        if(orderRank == 'desc'){
+          text = `${orderType}:asc`
+        }else{
+          text = `${orderType}:desc`
+        }
+      }else{
+        text = `${type}:desc`
+      }
+      this.searchParams.order = text
       this.getSearchData(this.searchParams)
     }
   }
