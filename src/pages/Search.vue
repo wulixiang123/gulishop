@@ -20,12 +20,16 @@
             <li class="with-x"
             v-if="searchParams.keyword"
             >{{ searchParams.keyword }}<i @click="removeKeyword">×</i></li>
+            <!-- 品牌展示 -->
+            <li class="with-x"
+            v-if="searchParams.trademark"
+            >{{ searchParams.trademark.split(':')[1] }}<i @click="removeTrademark">×</i></li>
           </ul>
         </div>
 
         <!-- 搜索器 -->
         <!-- <SearchSelector /> -->
-        <search-selector></search-selector>
+        <search-selector @changeTrademark="changeTrademark"></search-selector>
 
         <!--商品展示区-->
         <div class="details clearfix">
@@ -199,6 +203,7 @@ export default {
   // },
   methods:{
     ...mapActions('search',['getSearchData']),
+    // 三级分类组装数据
     receiveRouteData(){
       const {category1Id,category2Id,category3Id,categoryName} = this.$route.query
       this.searchParams.category1Id = category1Id
@@ -210,18 +215,39 @@ export default {
       const {keyword} = this.$route.params// 搜索组装数据
       this.searchParams.keyword = keyword
     },
+     // 删除三级分类
     removeCategory(){
+      // 直接删除的问题是: 路由的参数没有干掉
+      // this.searchParams.category1Id = undefined
+      // this.searchParams.categoryName = undefined
+      // 应该把路由参数也干掉
+      // 重新跳转当前要全面,把query参数干掉,重新去组装数据,发送请求
       this.$router.push({
         name:'Search',
         params:this.$route.params
       })
     },
+    // 删除搜索
     removeKeyword(){
       // 和三级分类删除一样,干掉params参数(重新跳转干掉)
       this.$router.push({
         name:'Search',
         query:this.$route.query
       })
+    },
+    // 品牌点击
+    changeTrademark(tm){
+      // 组装数据
+      this.searchParams.trademark = `${tm.tmId}:${tm.tmName}`
+      // 发送请求
+      this.getSearchData(this.searchParams)
+    },
+    // 删除品牌面包屑
+    removeTrademark(){
+      // 组装数据
+      this.searchParams.trademark = ''
+      // 发送请求
+      this.getSearchData(this.searchParams)
     }
   }
 };

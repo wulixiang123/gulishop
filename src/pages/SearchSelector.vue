@@ -5,7 +5,7 @@
 		<div class="fl key brand">品牌</div>
 		<div class="value logos">
 		  <ul class="logo-list">
-			<li v-for="tm in tmList" :key="tm.tmId">{{ tm.tmName }}</li>
+			<li v-for="tm in tmList" :key="tm.tmId" @click="tmClick(tm)" style="cursor: pointer">{{ tm.tmName }}</li>
 		  </ul>
 		</div>
 	  </div>
@@ -34,6 +34,11 @@
 	  computed: {
 	  ...mapGetters('search', ['attrsList', 'tmList'])
 	},
+	methods:{
+		tmClick(tm){
+				this.$emit('changeTrademark',tm)
+		}
+	}
   };
   </script>
   
