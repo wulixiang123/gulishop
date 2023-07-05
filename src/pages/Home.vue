@@ -78,7 +78,7 @@ import {mapState} from 'vuex'
 export default {
   components: { TypeNav, ListContainer,Recommend,Rank, Like, Floor, Brand, },
 name:'Home',
-computed:{
+computed:{//计算属性
   ...mapState({
     floorList:state=>state.home.floorList
   })

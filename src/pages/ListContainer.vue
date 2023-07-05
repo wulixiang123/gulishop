@@ -158,7 +158,7 @@ export default {
   //     })
   //   }
   // },
-  computed:{
+  computed:{//计算属性
     ...mapState({
       bannerList:state => state.home.bannerList
     })

@@ -187,7 +187,7 @@ export default {
     //   trailing: true // 先等待,后执行(等待之后调用)
     // })
   },
-  computed:{
+  computed:{//计算属性
     ...mapState({
       categoryList:state => state.home.categoryList
     })
