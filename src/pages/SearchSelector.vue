@@ -1,6 +1,7 @@
 <template>
 	<!--搜索选择器-->
 	<div class="clearfix selector">
+		<!-- 品牌 -->
 	  <div class="type-wrap logo">
 		<div class="fl key brand">品牌</div>
 		<div class="value logos">
@@ -9,6 +10,7 @@
 		  </ul>
 		</div>
 	  </div>
+	  <!-- 平台属性 -->
 	  <div
 			  class="type-wrap"
 			  v-for="attr in attrsList"
@@ -18,7 +20,7 @@
 		<div class="fl value">
 		  <ul class="type-list">
 			<li v-for="(attrValue, index) in attr.attrValueList" :key="index">
-			  <a href="javascript:;">{{ attrValue }}</a>
+			  <a href="javascript:;" @click="attrValClick(attr,attrValue)">{{ attrValue }}</a>
 			</li>
 		  </ul>
 		</div>
@@ -37,6 +39,9 @@
 	methods:{
 		tmClick(tm){
 				this.$emit('changeTrademark',tm)
+		},
+		attrValClick(attr,attrValue){
+			this.$emit('changeProps',attr,attrValue)
 		}
 	}
   };

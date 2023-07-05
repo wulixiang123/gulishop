@@ -24,12 +24,20 @@
             <li class="with-x"
             v-if="searchParams.trademark"
             >{{ searchParams.trademark.split(':')[1] }}<i @click="removeTrademark">×</i></li>
+            <!-- 平台属性 -->
+            <li class="with-x"
+            v-if="searchParams.props.length"
+            v-for="(attr,index) in searchParams.props"
+            >{{ attr.split(':')[1] }}<i @click="removeAttr(index)">×</i></li>
           </ul>
         </div>
 
         <!-- 搜索器 -->
         <!-- <SearchSelector /> -->
-        <search-selector @changeTrademark="changeTrademark"></search-selector>
+        <search-selector 
+        @changeTrademark="changeTrademark"
+        @changeProps="changeProps"
+        ></search-selector>
 
         <!--商品展示区-->
         <div class="details clearfix">
@@ -246,6 +254,25 @@ export default {
     removeTrademark(){
       // 组装数据
       this.searchParams.trademark = ''
+      // 发送请求
+      this.getSearchData(this.searchParams)
+    },
+    // 平台属性点击
+    changeProps(attr,attrValue){
+      // 组装数据
+      let text = `${attr.attrId}:${attrValue}:${attr.attrName}`
+      // 重复校验
+      if(this.searchParams.props.includes(text)){
+        return
+      }
+      this.searchParams.props.push(text)
+      // 发送请求
+      this.getSearchData(this.searchParams)
+    },
+    // 删除平台属性面包屑
+    removeAttr(index){
+      // 组装数据
+      this.searchParams.props.splice(index,1)
       // 发送请求
       this.getSearchData(this.searchParams)
     }
