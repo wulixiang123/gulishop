@@ -12,9 +12,14 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
+            <!-- 三级分类面包屑 -->
             <li class="with-x"
             v-if="searchParams.categoryName"
             >{{ searchParams.categoryName }}<i @click="removeCategory">×</i></li>
+            <!-- 搜索面包屑 -->
+            <li class="with-x"
+            v-if="searchParams.keyword"
+            >{{ searchParams.keyword }}<i @click="removeKeyword">×</i></li>
           </ul>
         </div>
 
@@ -201,11 +206,21 @@ export default {
       this.searchParams.category3Id = category3Id
       this.searchParams.categoryName = categoryName
       // 注意: 请求参数中如果是undefined,axios就不会给我们携带参数
+
+      const {keyword} = this.$route.params// 搜索组装数据
+      this.searchParams.keyword = keyword
     },
     removeCategory(){
       this.$router.push({
         name:'Search',
         params:this.$route.params
+      })
+    },
+    removeKeyword(){
+      // 和三级分类删除一样,干掉params参数(重新跳转干掉)
+      this.$router.push({
+        name:'Search',
+        query:this.$route.query
       })
     }
   }
