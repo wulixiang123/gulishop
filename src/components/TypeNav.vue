@@ -151,9 +151,9 @@ export default {
       if(e.target.nodeName == 'A'){// 点击的是A标签,要跳转页面
         const {category1id,category2id,category3id,categoryname}=e.target.dataset
         let query = {}
-        category1id ? query.category1id = category1id:''
-        category2id ? query.category2id = category2id:''
-        category3id ? query.category3id = category3id:''
+        category1id ? query.category1Id = category1id:''
+        category2id ? query.category2Id = category2id:''
+        category3id ? query.category3Id = category3id:''
         query.categoryName = categoryname
         // 如果有params参数,不能丢失掉
         let location = {
@@ -161,7 +161,7 @@ export default {
           name:'Search',// name和params可以配合使用
           query
         }
-        if(this.$router.push){
+        if(this.$router.params){
          location.params = this.$route.params 
         }
         this.$router.push(location)

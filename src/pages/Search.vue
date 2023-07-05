@@ -60,7 +60,7 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="javascript:;" target="_blank"
+                    <a href="javascript:;"
                       ><img :src="goods.defaultImg"
                     /></a>
                   </div>
@@ -161,14 +161,48 @@ export default {
   components: {
     SearchSelector
   },
+  data(){
+    return{
+      searchParams:{
+        category1Id: '',
+        category2Id: '',
+        category3Id: '',
+        categoryName: '',
+        keyword: '', // 搜索框
+        trademark: '', // 品牌
+        props: [], // 平台属性
+        order: '1:desc',  // 默认 "1:desc" 综合:降序
+        pageNo: 1,
+        pageSize: 10
+      }
+    }
+  },
   computed:{
     ...mapGetters('search',['goodsList'])
   },
-  mounted(){
-    this.getSearchData()
+  watch:{
+    $route:{
+      handler(navl){
+        this.receiveRouteData()//组装数据
+        this.getSearchData(this.searchParams)//发送请求
+      },
+      immediate:true,
+      deep:true
+    }
   },
+  // mounted(){
+  //   this.getSearchData()
+  // },
   methods:{
-    ...mapActions('search',['getSearchData'])
+    ...mapActions('search',['getSearchData']),
+    receiveRouteData(){
+      const {category1Id,category2Id,category3Id,categoryName} = this.$route.query
+      this.searchParams.category1Id = category1Id
+      this.searchParams.category2Id = category2Id
+      this.searchParams.category3Id = category3Id
+      this.searchParams.categoryName = categoryName
+      // 注意: 请求参数中如果是undefined,axios就不会给我们携带参数
+    }
   }
 };
 </script>
