@@ -91,9 +91,14 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="javascript:;">
+
+                    <router-link :to="`/detail/${goods.id}`">
                       <img :src="goods.defaultImg"/>
-                    </a>
+                    </router-link>
+
+                    <!-- <a href="javascript:;">
+                      <img :src="goods.defaultImg"/>
+                    </a> -->
                   </div>
                   <div class="price">
                     <strong>
@@ -102,11 +107,16 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
+
+                    <router-link :to="`/detail/${goods.id}`">
+                      {{ goods.title }}
+                    </router-link>
+
+                    <!-- <a
                       href="javascript:;"
                     >
                       {{ goods.title }}
-                    </a>
+                    </a> -->
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -245,6 +255,8 @@
 //          在发请求之前去判断当前是翻页还是其他交互,在actions中发的请求,在actions中判断
 //          注意: 
 //          每次翻页完之后,需要把recordPageNo重置为und,让这个变量下一次重新记录
+// ----------------
+// 点击商品跳转商品详情页 - 具体查看 Detail.vue 页面
 import SearchSelector from "./SearchSelector";
 import { mapActions, mapGetters } from 'vuex'
 export default {
