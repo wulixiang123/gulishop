@@ -1,22 +1,20 @@
 <template>
     <div class="pagination">
 
-      <div>pageTotal:{{ pageTotal }}</div>
-      <div>start:{{ startEnd.start }} --- end:{{ startEnd.end }}</div>
 
       <button>上一页</button>
-      <button>1</button>
-      <button>...</button>
-      <button>3</button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>7</button>
-      <button>···</button>
-      <button>9</button>
-      <button>上一页</button>
+      <button v-if="startEnd.start > 1">1</button>
+      <button v-if="startEnd.start > 2">...</button>
+      <button
+      v-for="item in startEnd.end"
+      :key="item"
+      v-if="item >= startEnd.start"
+      >{{ item }}</button>
+      <button v-if="startEnd.end < pageTotal - 1">···</button>
+      <button v-if="startEnd.end < pageTotal">{{ pageTotal }}</button>
+      <button>下一页</button>
   
-      <button style="margin-left: 30px">共 60 条</button>
+      <button style="margin-left: 30px">共 {{ total }} 条</button>
     </div>
   </template>
   
@@ -68,14 +66,14 @@
             start = 1
             end = count
           }
-          if(end < pageTotal){
+          if(end > pageTotal){
             end = pageTotal
             start = pageTotal - count + 1
-          }else{
-            return {
-              start,end
-            }
           }
+        }
+        return {
+          start,
+          end
         }
       }
     }
