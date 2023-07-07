@@ -19,3 +19,8 @@ export const reqFloorList = () => {
 export const reqSearchPage = (data={}) => {
     return request.post('/list',data)
 }
+
+// 获取商品详情
+export const reqGoodsDetail = (skuId) => {
+    return request.get(`/item/${skuId}`)
+}
