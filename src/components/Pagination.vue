@@ -1,5 +1,9 @@
 <template>
     <div class="pagination">
+
+      <div>pageTotal:{{ pageTotal }}</div>
+      <div>start:{{ startEnd.start }} --- end:{{ startEnd.end }}</div>
+
       <button>上一页</button>
       <button>1</button>
       <button>...</button>
@@ -44,7 +48,36 @@
       count:{
         type:Number,
         default:5
+      }
+    },
+    computed:{
+      pageTotal(){
+        return Math.ceil(this.total / this.pageSize)
       },
+      startEnd(){
+        let { pageNo,pageSize,total,count,pageTotal } = this
+        let start = 0
+        let end = pageTotal
+        if(pageTotal < count){
+          start = 1
+          end = pageTotal
+        }else{
+          start = pageNo - (count - 1) / 2
+          end = pageNo + (count - 1) / 2
+          if(start < 1){
+            start = 1
+            end = count
+          }
+          if(end < pageTotal){
+            end = pageTotal
+            start = pageTotal - count + 1
+          }else{
+            return {
+              start,end
+            }
+          }
+        }
+      }
     }
   };
   </script>

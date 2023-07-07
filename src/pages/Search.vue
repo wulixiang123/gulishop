@@ -141,9 +141,10 @@
             总条数  --  直接展示
             连续数 -- 连续展示几个数  一般是奇数3  5  7
             注意: 这里的总页面我们通过计算得出    总页码 = 向上取整(总条数/每页条数)
+            :pageNo="searchParams.pageNo"
           -->
           <pagination 
-            :pageNo="searchParams.pageNo"
+            :pageNo="21"
             :pageSize="searchParams.pageSize"
             :total="total"
             :count="5"
