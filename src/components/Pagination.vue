@@ -2,7 +2,7 @@
     <div class="pagination">
 
 
-      <button @click="$emit('change',pageNo-1)">上一页</button>
+      <button @click="$emit('change',pageNo-1)" :disabled="pageNo == 1">上一页</button>
       <button v-if="startEnd.start > 1" @click="$emit('change',1)">1</button>
       <button v-if="startEnd.start > 2">...</button>
       <button
@@ -14,7 +14,7 @@
       >{{ item }}</button>
       <button v-if="startEnd.end < pageTotal - 1">···</button>
       <button v-if="startEnd.end < pageTotal" @click="$emit('change',pageTotal)">{{ pageTotal }}</button>
-      <button @click="$emit('change',pageNo + 1)">下一页</button>
+      <button @click="$emit('change',pageNo + 1)" :disabled="pageNo == pageTotal">下一页</button>
   
       <button style="margin-left: 30px">共 {{ total }} 条</button>
     </div>

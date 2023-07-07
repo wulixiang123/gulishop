@@ -232,6 +232,19 @@
 //        1. 静态搭建
 //        2. 初始化数据展示
 //        3. 交互
+//        问题: 把 翻页 和 其他交互分为两类
+//          当翻页的时候一定是pageNo改变,其他参数不变
+//          当其他交互改变参数的时候,其他参数变,pageNo一定不变
+//          结论: 翻页 和 其他的交互式互斥的
+//          解决方案: 那一个变量记录,当前是不是翻页
+//                    如果是翻页,正常翻页
+//                    如果不是翻页,那么PageNo重置为1
+//          在 searchParams 中,加一个参数 recordPageNo,当翻页的时候,这个值也记录翻页
+//              recordPageNo这个值后端不要,可以传给后端,后端不会处理而已
+//              当然也可以不传给后端,让携带的参数更干净
+//          在发请求之前去判断当前是翻页还是其他交互,在actions中发的请求,在actions中判断
+//          注意: 
+//          每次翻页完之后,需要把recordPageNo重置为und,让这个变量下一次重新记录
 import SearchSelector from "./SearchSelector";
 import { mapActions, mapGetters } from 'vuex'
 export default {
@@ -252,7 +265,9 @@ export default {
         props: [], // 平台属性
         order: '1:desc',  // 默认 "1:desc" 综合:降序
         pageNo: 1,
-        pageSize: 2
+        pageSize: 2,
+
+        recordPageNo: undefined, // 为什么要放成und?发请求的时候unb是不会携带给后端的(axios做的)
       }
     }
   },
@@ -388,6 +403,7 @@ export default {
       }
       // 组装数据
       this.searchParams.pageNo = page
+      this.searchParams.recordPageNo = page // 记录当前翻页
       // 发送请求
       this.getSearchData(this.searchParams)
     }
