@@ -22,7 +22,23 @@ const actions = {
         }
     }
 }
-const getters = {}
+const getters = {
+    categoryView(state){
+        return state.goodsInfo.categoryView || {}
+    },
+    skuInfo(state){
+        return state.goodsInfo.skuInfo || { }
+    },
+    spuSaleAttrList(state){
+        return state.goodsInfo.spuSaleAttrList || []
+    },
+    skuImageList(state){
+        return state.goodsInfo.skuInfo?.skuImageList || []
+        // state.goodsInfo.skuInfo?.skuImageList
+        // 等价于
+        // state.goodsInfo.skuInfo && state.goodsInfo.skuInfo.skuImageList
+    }
+}
 
 export default {
     namespaced:true,//开启命名空间
