@@ -8,36 +8,41 @@
         <div class="bread">
           <ul class="fl sui-breadcrumb">
             <li>
-              <span href="#">全部结果</span>
+              <span href="javascript:;">全部结果</span>
             </li>
           </ul>
           <ul class="fl sui-tag">
             <!-- 三级分类面包屑 -->
-            <li class="with-x"
-            v-if="searchParams.categoryName"
-            >{{ searchParams.categoryName }}<i @click="removeCategory">×</i></li>
+            <li class="with-x" v-if="searchParams.categoryName">
+              {{ searchParams.categoryName }}
+              <i @click="removeCategory">×</i>
+            </li>
             <!-- 搜索面包屑 -->
-            <li class="with-x"
-            v-if="searchParams.keyword"
-            >{{ searchParams.keyword }}<i @click="removeKeyword">×</i></li>
+            <li class="with-x" v-if="searchParams.keyword">
+              {{ searchParams.keyword }}
+              <i @click="removeKeyword">×</i>
+            </li>
             <!-- 品牌展示 -->
-            <li class="with-x"
-            v-if="searchParams.trademark"
-            >{{ searchParams.trademark.split(':')[1] }}<i @click="removeTrademark">×</i></li>
+            <li class="with-x" v-if="searchParams.trademark">
+              {{ searchParams.trademark.split(":")[1] }}
+              <i @click="removeTrademark">×</i>
+            </li>
             <!-- 平台属性 -->
-            <li class="with-x"
-            v-if="searchParams.props.length"
-            v-for="(attr,index) in searchParams.props"
-            >{{ attr.split(':')[1] }}<i @click="removeAttr(index)">×</i></li>
+            <li
+              class="with-x"
+              v-for="(attr, index) in searchParams.props"
+            >
+              {{ attr.split(":")[1] }}
+              <i @click="removeAttr(index)">×</i>
+            </li>
           </ul>
         </div>
 
         <!-- 搜索器 -->
-        <!-- <SearchSelector /> -->
-        <search-selector 
-        @changeTrademark="changeTrademark"
-        @changeProps="changeProps"
-        ></search-selector>
+        <SearchSelector
+          @changeTrademark="changeTrademark"
+          @changeProps="changeProps"
+        />
 
         <!--商品展示区-->
         <div class="details clearfix">
@@ -45,46 +50,33 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li :class="searchParams.order.split(':')[0] == '1' && 'active'">
+                <li :class="  currentType == '1' && 'active'  ">
                   <a href="javascript:;" @click="orderHandler(1)">
                     <span>综合</span>
                     <span
-                    v-if="searchParams.order.split(':')[0] == '1'"
-                    class="iconfont"
-                    :class="{
-                      'icon-jiantou_xiangxia':searchParams.order.split(':')[1] == 'desc',
-                      'icon-jiantou_xiangshang':searchParams.order.split(':')[1] == 'asc'
-                    }"
+                      v-if=" currentType == '1' "
+                      class="iconfont"
+                      :class="{
+                        'icon-jiantou_xiangxia': currentRank == 'desc',
+                        'icon-jiantou_xiangshang': currentRank == 'asc'
+                      }"
                     ></span>
                   </a>
                 </li>
-                <!-- <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li> -->
                 <li :class="{
-                  active:searchParams.order.split(':')[0] == '2'
+                  active: currentType == '2'
                 }">
                   <a href="javascript:;" @click="orderHandler(2)">
                     <span>价格</span>
-                  <span
-                  v-if="searchParams.order.split(':')[0] == '2'"
-                  class="iconfont"
-                  :class="{
-                    'icon-jiantou_xiangshang':searchParams.order.split(':')[1] == 'desc',
-                    'icon-jiantou_xiangxia':searchParams.order.split(':')[1] == 'asc'
-                  }"
-                  ></span>
+                    <span
+                      v-if="currentType == '2'"
+                      class="iconfont"
+                      :class="{
+                        'icon-jiantou_xiangxia': currentRank == 'desc',
+                        'icon-jiantou_xiangshang': currentRank == 'asc'
+                      }"
+                    ></span>
                   </a>
-                  
                 </li>
               </ul>
             </div>
@@ -92,16 +84,16 @@
           <!-- 商品列表 -->
           <div class="goods-list">
             <ul class="yui3-g">
-              <li class="yui3-u-1-5"
-              v
-              v-for="goods in goodsList"
-              :key="goods.id"
+              <li
+                class="yui3-u-1-5"
+                v-for="goods in goodsList"
+                :key="goods.id"
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="javascript:;"
-                      ><img :src="goods.defaultImg"
-                    /></a>
+                    <a href="javascript:;">
+                      <img :src="goods.defaultImg"/>
+                    </a>
                   </div>
                   <div class="price">
                     <strong>
@@ -111,10 +103,10 @@
                   </div>
                   <div class="attr">
                     <a
-                      target="_blank"
                       href="javascript:;"
-                      >{{ goods.title }}</a
                     >
+                      {{ goods.title }}
+                    </a>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -141,45 +133,17 @@
             总条数  --  直接展示
             连续数 -- 连续展示几个数  一般是奇数3  5  7
             注意: 这里的总页面我们通过计算得出    总页码 = 向上取整(总条数/每页条数)
-            :pageNo="searchParams.pageNo"
+          
+            :pageNo="searchParams.pageNo"  真的
+            :pageNo="5"  假的,用于我们现在计算展示分页组件
           -->
-          <pagination 
-            :pageNo="30"
+          <Pagination
+            :pageNo="searchParams.pageNo"
             :pageSize="searchParams.pageSize"
             :total="total"
             :count="5"
-            >
-
-          </pagination>
-          <!-- <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div> -->
+            @change="changePageNo"
+          ></Pagination>
         </div>
       </div>
     </div>
@@ -264,19 +228,21 @@
 //            
 //        3.6.2 展示层
 //    3.7 翻页
-import SearchSelector from './SearchSelector.vue';
-import {mapActions,mapGetters} from 'vuex'
-import Pagination from '../components/Pagination.vue';
+//        自己封装分页器
+//        1. 静态搭建
+//        2. 初始化数据展示
+//        3. 交互
+import SearchSelector from "./SearchSelector";
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: "Search",
   components: {
     SearchSelector,
-    Pagination
   },
-  data(){
-    return{
+  data() {
+    return {
       // 发请求携带的参数
-      searchParams:{
+      searchParams: {
         category1Id: '',
         category2Id: '',
         category3Id: '',
@@ -290,100 +256,139 @@ export default {
       }
     }
   },
-  computed:{
-    ...mapGetters('search',['goodsList','total'])
-  },
-  watch:{
-    $route:{
-      handler(navl){
-        this.receiveRouteData()//组装数据
-        this.getSearchData(this.searchParams)//发送请求
-      },
-      immediate:true,
-      deep:true
+  computed: {
+    ...mapGetters('search', ['goodsList', 'total']),
+    // 计算排序的类型和排序的方式
+    currentType() {
+      return this.searchParams.order.split(':')[0]
+    },
+    currentRank() {
+      return this.searchParams.order.split(':')[1]
     }
   },
-  methods:{
-    ...mapActions('search',['getSearchData']),
+  watch: {
+    $route: {
+      handler(nval) {
+        // 组装数据
+        this.receiveRouteData()
+        // 发送请求
+        this.getSearchData(this.searchParams)
+      },
+      immediate: true,
+      deep: true // 深度监听
+    }
+  },
+  methods: {
+    ...mapActions('search', ['getSearchData']),
     // 三级分类组装数据
-    receiveRouteData(){
-      const {category1Id,category2Id,category3Id,categoryName} = this.$route.query
+    receiveRouteData() {
+      const { category1Id, category2Id, category3Id, categoryName } = this.$route.query
+
+      const { keyword } = this.$route.params  // 搜索组装数据
+      this.searchParams.keyword = keyword
+
       this.searchParams.category1Id = category1Id
       this.searchParams.category2Id = category2Id
       this.searchParams.category3Id = category3Id
       this.searchParams.categoryName = categoryName
       // 注意: 请求参数中如果是undefined,axios就不会给我们携带参数
-
-      const {keyword} = this.$route.params// 搜索组装数据
-      this.searchParams.keyword = keyword
+      
     },
-     // 删除三级分类
-    removeCategory(){
+    // 删除三级分类
+    removeCategory() {
       // 直接删除的问题是: 路由的参数没有干掉
       // this.searchParams.category1Id = undefined
       // this.searchParams.categoryName = undefined
       // 应该把路由参数也干掉
       // 重新跳转当前要全面,把query参数干掉,重新去组装数据,发送请求
-      this.$router.push({
-        name:'Search',
-        params:this.$route.params
+      this.$router.replace({
+        name: 'Search',
+        params: this.$route.params
       })
     },
     // 删除搜索
-    removeKeyword(){
+    removeKeyword() {
       // 和三级分类删除一样,干掉params参数(重新跳转干掉)
-      this.$router.push({
-        name:'Search',
-        query:this.$route.query
+      this.$router.replace({
+        name: 'Search',
+        query: this.$route.query
       })
     },
     // 品牌点击
-    changeTrademark(tm){
+    changeTrademark(tm) {
       // 组装数据
-      this.searchParams.trademark = `${tm.tmId}:${tm.tmName}`
+      this.searchParams.trademark = `${ tm.tmId }:${ tm.tmName }`
       // 发送请求
       this.getSearchData(this.searchParams)
     },
     // 删除品牌面包屑
-    removeTrademark(){
+    removeTrademark() {
       // 组装数据
       this.searchParams.trademark = ''
       // 发送请求
       this.getSearchData(this.searchParams)
     },
     // 平台属性点击
-    changeProps(attr,attrValue){
+    changeProps(attr, attrValue) {
       // 组装数据
-      let text = `${attr.attrId}:${attrValue}:${attr.attrName}`
+      let text = `${ attr.attrId }:${attrValue}:${attr.attrName}`
       // 重复校验
-      if(this.searchParams.props.includes(text)){
+      if ( this.searchParams.props.includes(text) ) {
         return
       }
+
       this.searchParams.props.push(text)
       // 发送请求
       this.getSearchData(this.searchParams)
     },
     // 删除平台属性面包屑
-    removeAttr(index){
+    removeAttr(index) {
       // 组装数据
-      this.searchParams.props.splice(index,1)
+      this.searchParams.props.splice(index, 1)
       // 发送请求
       this.getSearchData(this.searchParams)
     },
     // 点击排序
-    orderHandler(type){
-      let text = ''
-      let [orderType,orderRank] = this.searchParams.order.split(':')
-      if(type == orderType){
-        if(orderRank == 'desc'){
-          text = `${orderType}:asc`
-        }else{
-          text = `${orderType}:desc`
+    orderHandler(type) {  // type  -> 1 / 2 代表点击的是综合还是价格
+
+      let text = '' // 存储结果
+
+      // 拿到【当前的】 排序类型(orderType) 和 升序降序(orderRank)
+      let [orderType, orderRank] = this.searchParams.order.split(":")
+
+      if (type == orderType) { // 点击的是相同类型,切换升序降序
+
+        if (orderRank == 'desc') { // 当前降序 应该变成升序
+          
+          text = `${ orderType }:asc`
+
+        } else { // 当前升序 应该变成降序
+
+          text = `${ orderType }:desc`
+
         }
-      }else{
-        text = `${type}:desc`
+        
+      } else { // 点击不同类型的, 从降序开始
+
+        text = `${ type }:desc` // 不同类型都是从降序开始
+
       }
+
+      // 组装数据
       this.searchParams.order = text
+
+      // 发送请求
+      this.getSearchData(this.searchParams)
+    },
+    // 翻页
+    changePageNo(page) {
+      // 页码相同,不发请求
+      if (page == this.searchParams.pageNo) {
+        return
+      }
+      // 组装数据
+      this.searchParams.pageNo = page
+      // 发送请求
       this.getSearchData(this.searchParams)
     }
   }
