@@ -134,8 +134,22 @@
               </li>
             </ul>
           </div>
-          <!-- 分页器 -->
-          <pagination></pagination>
+          <!--
+            分页器
+            当前页 -- 高亮使用,计算使用
+            每页条数  -- 用于计算
+            总条数  --  直接展示
+            连续数 -- 连续展示几个数  一般是奇数3  5  7
+            注意: 这里的总页面我们通过计算得出    总页码 = 向上取整(总条数/每页条数)
+          -->
+          <pagination 
+            :pageNo="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="total"
+            :count="5"
+            >
+
+          </pagination>
           <!-- <div class="fr page">
             <div class="sui-pagination clearfix">
               <ul>
@@ -276,7 +290,7 @@ export default {
     }
   },
   computed:{
-    ...mapGetters('search',['goodsList'])
+    ...mapGetters('search',['goodsList','total'])
   },
   watch:{
     $route:{

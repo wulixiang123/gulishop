@@ -31,6 +31,10 @@ const getters = {
   },
   tmList(state) {
     return state.searchData.trademarkList || []
+  },
+  // 总条数
+  total(state){
+    return state.searchData.total || 0
   }
 }
 
