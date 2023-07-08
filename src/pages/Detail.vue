@@ -93,12 +93,21 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" 
+                v-model="goodsNum"
+                @change="checkGoodsNum"
+                />
+                <a href="javascript:" class="plus"
+                @click="goodsNumBtn(1)"
+                >+</a>
+                <a href="javascript:" class="mins"
+                @click="goodsNumBtn(-1)"
+                >-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:"
+                @click="addCartHandler"
+                >加入购物车</a>
               </div>
             </div>
           </div>
@@ -371,7 +380,8 @@ export default {
   },
   data() {
     return {
-      goodsId: null
+      goodsId: null,
+      goodsNum:1
     }
   },
   computed: {
@@ -386,9 +396,46 @@ export default {
   },
   methods: {
     ...mapActions('detail', ['getGoodsInfo']),
+    // 销售属性点击
     saleAttrValSel(saleAttrVal, spuSaleAttrValueList) {
       spuSaleAttrValueList.forEach(item => item.isChecked = '0')
       saleAttrVal.isChecked = '1'
+    },
+    // 商品数量修改(不能减成负数)
+    goodsNumBtn(num){
+      this.goodsNum = +this.goodsNum + num
+      if(this.goodsNum < 1){
+        this.goodsNum = 1
+      }
+    },
+    // 校验input输入的内容
+    checkGoodsNum(){
+      console.log(this.goodsNum);
+      // 字符串、小数、负数 和 非空 校验
+      // ^ 以...开头
+      // $ 以...结尾
+      // [1-9]是数字1到9算便出现一个
+      // \d 是数字0到9
+      // *代表前一个数字出现0次或多次
+
+      // 理解: 必须以数字1-9开头  \d*出现0-9任意数字,任意次数  
+      let reg = /^[1-9]\d*$/
+      if(!reg.test(this.goodsNum)){
+        this.goodsNum = 1
+      }
+    },
+    // 添加购物车
+    addCartHandler(){
+      // 发现调用添加购物车调用接口之后,返回的是一个null
+      // 所以不需要把数据存储到store中的state
+      // 按理来说,调用接口成功之后,应该跳转到添加购物车成功页面
+      // 但是,我这里调用的是actions,我怎么接口调用成功了???
+
+      this.$store.dispatch('cart/addCart',{
+        skuId:this.goodsId,
+        skuNum:this.goodsNum
+      })
+      console.log('跳转');
     }
   }
 };
