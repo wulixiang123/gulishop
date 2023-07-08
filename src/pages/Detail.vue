@@ -93,21 +93,12 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" 
-                v-model="goodsNum"
-                @change="checkGoodsNum"
-                />
-                <a href="javascript:" class="plus"
-                @click="goodsNumBtn(1)"
-                >+</a>
-                <a href="javascript:" class="mins"
-                @click="goodsNumBtn(-1)"
-                >-</a>
+                <input autocomplete="off" class="itxt" v-model="goodsNum" @change="checkGoodsNum"/>
+                <a href="javascript:" class="plus" @click="goodsNumBtn(1)">+</a>
+                <a href="javascript:" class="mins" @click="goodsNumBtn(-1)">-</a>
               </div>
               <div class="add">
-                <a href="javascript:"
-                @click="addCartHandler"
-                >加入购物车</a>
+                <a href="javascript:" @click="addCartHandler">加入购物车</a>
               </div>
             </div>
           </div>
@@ -363,12 +354,20 @@
 //    3. mounted中调用actions,拿数据
 //    4. 渲染数据
 // 3. 交互
-//    3.1 放大镜(完成)
-//    3.2 小图列表点击(完成)
+//    3.1 放大镜(完成) - 详情见 Zoom组件
+//    3.2 小图列表点击(完成) - 详情见 ImagesList组件
 //    3.3 销售属性点击(排他思想做)
 //        点击的销售属性值中的isChecked变为1
 //        其他的变为0
 //    3.4 添加购物车
+//        首先需要一个商品数量的数据 - goodsNum
+//        3.4.1 加减按钮,修改当前商品数量
+//        3.4.2 input框输入内容,修改商品数量
+//              直接用正则,限制输入的内容为正整数即可
+//        3.4.3 点击"添加购物车",调用接口
+//            api准备
+//            三连环
+//            点击"添加购物车"调用actions
 import ImageList from "./ImageList/ImageList";
 import Zoom from "./Zoom/Zoom";
 import { mapActions, mapGetters } from 'vuex'
@@ -381,7 +380,7 @@ export default {
   data() {
     return {
       goodsId: null,
-      goodsNum:1
+      goodsNum: 1
     }
   },
   computed: {
@@ -402,15 +401,15 @@ export default {
       saleAttrVal.isChecked = '1'
     },
     // 商品数量修改(不能减成负数)
-    goodsNumBtn(num){
+    goodsNumBtn(num) {
       this.goodsNum = +this.goodsNum + num
-      if(this.goodsNum < 1){
+      if (this.goodsNum < 1) {
         this.goodsNum = 1
       }
     },
     // 校验input输入的内容
-    checkGoodsNum(){
-      console.log(this.goodsNum);
+    checkGoodsNum() {
+      console.log(this.goodsNum)
       // 字符串、小数、负数 和 非空 校验
       // ^ 以...开头
       // $ 以...结尾
@@ -420,22 +419,58 @@ export default {
 
       // 理解: 必须以数字1-9开头  \d*出现0-9任意数字,任意次数  
       let reg = /^[1-9]\d*$/
-      if(!reg.test(this.goodsNum)){
+      if (!reg.test(this.goodsNum)) {
         this.goodsNum = 1
       }
     },
     // 添加购物车
-    addCartHandler(){
+    async addCartHandler() {
+
       // 发现调用添加购物车调用接口之后,返回的是一个null
       // 所以不需要把数据存储到store中的state
       // 按理来说,调用接口成功之后,应该跳转到添加购物车成功页面
       // 但是,我这里调用的是actions,我怎么接口调用成功了???
+      // 
+      try {
+        await this.$store.dispatch('cart/addCart', {
+          skuId: this.goodsId,
+          skuNum: this.goodsNum
+        })
 
-      this.$store.dispatch('cart/addCart',{
-        skuId:this.goodsId,
-        skuNum:this.goodsNum
-      })
-      console.log('跳转');
+        // 跳转到添加购物车成功页面
+        // 路由 默认path不区分大小写
+        // 在路由中配置
+        //  caseSensitive: true
+        // 让路由匹配大小写
+        // this.$router.push(`/addcartsuccess`)
+        
+        // 跳转添加购物车页面要显示商品的信息和商品数量
+        // 但是没有发请求,数据都是从 当前detail页面携带过去
+        // 数量通过 路由的 params 参数携带
+        // 商品信息通过 sessionStorage 携带
+        this.$router.push(`/addCartSuccess/${ this.goodsNum }`)
+        sessionStorage.setItem('GOODSINFO', JSON.stringify(this.skuInfo))
+
+
+        // localStorage 和 sessionStorage
+        // localStorage 本地存储
+        // sessionStorage 会话存储
+        // 相同点:
+        //    能存5M数据
+        //    只能存储字符串,想存对象存JSON字符串
+        // 不同点:
+        //    sessionStorage 关闭浏览器,就没有了
+        //    localStorage 只要不删,一直在
+
+
+        // 本地存储还有哪些方式?(拓展)
+
+
+
+      } catch (error) {
+        alert('添加购物车失败')
+      }
+
     }
   }
 };

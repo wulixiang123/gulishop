@@ -20,6 +20,7 @@ import Login from '@/pages/Login.vue'
 import Register from '@/pages/Register.vue'
 import Search from '@/pages/Search.vue'
 import Detail from '@/pages/Detail.vue'
+import AddCartSuccess from '@/pages/AddCartSuccess'
 
 export default new VueRouter({
     routes:[
@@ -38,6 +39,12 @@ export default new VueRouter({
             name:'/Detail',
             path:'/detail/:goodsId?',
             component:Detail
+        },
+        {
+            path:'/addCartSuccess/:skuNum?',
+            component:AddCartSuccess,
+            // path区分大小写(默认false)
+            caseSensitive: true
         },
         {
             path:'/register',
