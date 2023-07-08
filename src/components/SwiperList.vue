@@ -1,6 +1,7 @@
 <template>
   <div class="swiper-container" ref="mySwiperRef" id="mySwiper">
-          <div class="swiper-wrapper">
+    <slot>
+      <div class="swiper-wrapper">
             <div class="swiper-slide"
             v-for="(banner,index) in list"
             :key="banner.id"
@@ -23,6 +24,7 @@
           <!-- 如果需要导航按钮 -->
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
+    </slot>
         </div>
 </template>
 

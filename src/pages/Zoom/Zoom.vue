@@ -28,15 +28,22 @@
     props:['skuImageList'],
     data(){
       return{
-        isShow:false
+        isShow:false,
+        index:0
       }
     },
     computed:{
       currentImg(){
-        return this.skuImageList[0]
+        return this.skuImageList[this.index]
       }
     },
+    mounted(){
+      this.$bus.$on('changeIndex',this.changeIndex)
+    },
     methods:{
+      changeIndex(index){
+        this.index = index
+      },
       moveHandler(e){
       // console.log(e);
       // #region

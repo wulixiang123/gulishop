@@ -20,6 +20,9 @@ Vue.component(Pagination.name,Pagination)
 
 
 new Vue({
+  beforeCreate(){
+    Vue.prototype.$bus = this//安装总线
+  },
   router,
   store,
   render: h => h(App),
@@ -34,21 +37,21 @@ new Vue({
 //   console.log({e});
 // })
 
-import mockRequest from '@/utils/mockRequest'
-mockRequest.get('/getUserinfo').then(res=>{
-  console.log(res);
-}).catch(e=>{
-  console.log(e);
-})
 // import mockRequest from '@/utils/mockRequest'
-mockRequest.get('/getBannerList').then(res=>{
-  console.log(res);
-}).catch(e=>{
-  console.log(e);
-})
-// import mockRequest from '@/utils/mockRequest'
-mockRequest.get('/getFloorList').then(res=>{
-  console.log(res);
-}).catch(e=>{
-  console.log(e);
-})
+// mockRequest.get('/getUserinfo').then(res=>{
+//   console.log(res);
+// }).catch(e=>{
+//   console.log(e);
+// })
+// // import mockRequest from '@/utils/mockRequest'
+// mockRequest.get('/getBannerList').then(res=>{
+//   console.log(res);
+// }).catch(e=>{
+//   console.log(e);
+// })
+// // import mockRequest from '@/utils/mockRequest'
+// mockRequest.get('/getFloorList').then(res=>{
+//   console.log(res);
+// }).catch(e=>{
+//   console.log(e);
+// })

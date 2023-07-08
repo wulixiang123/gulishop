@@ -1,25 +1,44 @@
 <template>
-  <div class="swiper-container">
+  <swiper-list :list="skuImageList" :options="options">
+    <!-- <div class="swiper-container"> -->
     <div class="swiper-wrapper">
       <div 
       class="swiper-slide"
-      v-for="item in skuImageList"
+      v-for="(item,index) in skuImageList"
       :key="item.id"
+      @click="changeZoom(index)"
       >
         <img :src="item.imgUrl">
       </div>
     </div>
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
-  </div>
+  <!-- </div> -->
+  </swiper-list>
+
 </template>
 
 <script>
-
-  import Swiper from 'swiper'
   export default {
     name: "ImageList",
-    props:['skuImageList']
+    props:['skuImageList'],
+    data(){
+      return{
+        options:{
+          slidesPerView:3,//每页几条数据
+          slidesPerGroup:2,//滚动时滚动几张
+          navigation:{//前进后退按钮
+            nextEl:'.swiper-button-next',
+            prevEl:'.swiper-button-prev'
+          }
+        }
+      }
+    },
+    methods:{
+      changeZoom(index){
+        this.$bus.$emit('changeIndex',index)
+      }
+    }
   }
 </script>
 
