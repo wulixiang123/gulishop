@@ -21,6 +21,7 @@ import Register from '@/pages/Register.vue'
 import Search from '@/pages/Search.vue'
 import Detail from '@/pages/Detail.vue'
 import AddCartSuccess from '@/pages/AddCartSuccess'
+import ShopCart from '@/pages/ShopCart'
 
 export default new VueRouter({
     routes:[
@@ -45,6 +46,10 @@ export default new VueRouter({
             component:AddCartSuccess,
             // path区分大小写(默认false)
             caseSensitive: true
+        },
+        {
+            path:'/shopcart',
+            component:ShopCart
         },
         {
             path:'/register',

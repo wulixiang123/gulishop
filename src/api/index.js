@@ -29,3 +29,7 @@ export const reqGoodsDetail = (skuId) => {
 export const reqAddCart = (skuId,skuNum) => {
     return request.post(`/cart/addToCart/${ skuId }/${ skuNum }`)
 }
+
+export const reqCartList = () => {
+    return request.get(`/cart/cartList`)
+}
