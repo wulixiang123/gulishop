@@ -2,34 +2,33 @@ import { reqAddCart, reqCartList } from "@/api"
 
 
 const state = {
-    cartList:[]
+  cartList: []
 }
 
 const mutations = {
-    SET_CARTLIST(state,cartList){
-        state.cartList = cartList
-    }
+  SET_CARTLIST(state, cartList) {
+    state.cartList = cartList
+  }
 }
 
 const actions = {
-    // 购物车列表
-    async getCarList({commit}){
-        try {
-            let result = await reqCartList()
-            if(result && result.code == 200){
-                console.log(result);
-                // 这里等我们能看到返回的数据在写commit,不确定返回的内容是啥
-                // 直接忙写,容易写错
-                // commit('SET_CARTLIST', result.data)
-            }else{
-                console.log(result);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    // 添加购物车
+  // 购物车列表
+  async getCartList({ commit }) {
+    try {
+      let result = await reqCartList()
+      if (result && result.code == 200) {
+        console.log('接口返回的数据', result)
+        // 这里等我们能看到返回的数据在写commit,不确定返回的内容是啥
+        // 直接忙写,容易写错
+        // commit('SET_CARTLIST', result.data)
+      } else {
+        console.error(error)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  // 添加购物车
   async addCart({ commit }, { skuId, skuNum }) {
     
     try {

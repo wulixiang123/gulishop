@@ -13,18 +13,27 @@
       <div class="cart-body">
         <ul class="cart-list">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list">
+            <input type="checkbox" name="chk_list" />
           </li>
           <li class="cart-list-con2">
-            <img src="./images/goods1.png">
-            <div class="item-msg">米家（MIJIA） 小米小白智能摄像机增强版 1080p高清360度全景拍摄AI增强</div>
+            <img src="./images/goods1.png" />
+            <div class="item-msg">
+              米家（MIJIA） 小米小白智能摄像机增强版
+              1080p高清360度全景拍摄AI增强
+            </div>
           </li>
           <li class="cart-list-con4">
             <span class="price">399.00</span>
           </li>
           <li class="cart-list-con5">
             <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" value="1" minnum="1" class="itxt">
+            <input
+              autocomplete="off"
+              type="text"
+              value="1"
+              minnum="1"
+              class="itxt"
+            />
             <a href="javascript:void(0)" class="plus">+</a>
           </li>
           <li class="cart-list-con6">
@@ -32,25 +41,33 @@
           </li>
           <li class="cart-list-con7">
             <a href="#none" class="sindelet">删除</a>
-            <br>
+            <br />
             <a href="#none">移到收藏</a>
           </li>
         </ul>
 
         <ul class="cart-list">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" id="" value="">
+            <input type="checkbox" name="chk_list" id="" value="" />
           </li>
           <li class="cart-list-con2">
-            <img src="./images/goods2.png">
-            <div class="item-msg">华为（MIJIA） 华为metaPRO 30 浴霸4摄像 超清晰</div>
+            <img src="./images/goods2.png" />
+            <div class="item-msg">
+              华为（MIJIA） 华为metaPRO 30 浴霸4摄像 超清晰
+            </div>
           </li>
           <li class="cart-list-con4">
             <span class="price">5622.00</span>
           </li>
           <li class="cart-list-con5">
             <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" value="1" minnum="1" class="itxt">
+            <input
+              autocomplete="off"
+              type="text"
+              value="1"
+              minnum="1"
+              class="itxt"
+            />
             <a href="javascript:void(0)" class="plus">+</a>
           </li>
           <li class="cart-list-con6">
@@ -58,25 +75,33 @@
           </li>
           <li class="cart-list-con7">
             <a href="#none" class="sindelet">删除</a>
-            <br>
+            <br />
             <a href="#none">移到收藏</a>
           </li>
         </ul>
 
         <ul class="cart-list">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" id="" value="">
+            <input type="checkbox" name="chk_list" id="" value="" />
           </li>
           <li class="cart-list-con2">
-            <img src="./images/goods3.png">
-            <div class="item-msg">iphone 11 max PRO 苹果四摄 超清晰 超费电 超及好用</div>
+            <img src="./images/goods3.png" />
+            <div class="item-msg">
+              iphone 11 max PRO 苹果四摄 超清晰 超费电 超及好用
+            </div>
           </li>
           <li class="cart-list-con4">
             <span class="price">11399.00</span>
           </li>
           <li class="cart-list-con5">
             <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" value="1" minnum="1" class="itxt">
+            <input
+              autocomplete="off"
+              type="text"
+              value="1"
+              minnum="1"
+              class="itxt"
+            />
             <a href="javascript:void(0)" class="plus">+</a>
           </li>
           <li class="cart-list-con6">
@@ -84,7 +109,7 @@
           </li>
           <li class="cart-list-con7">
             <a href="#none" class="sindelet">删除</a>
-            <br>
+            <br />
             <a href="#none">移到收藏</a>
           </li>
         </ul>
@@ -92,7 +117,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox">
+        <input class="chooseAll" type="checkbox" />
         <span>全选</span>
       </div>
       <div class="option">
@@ -101,8 +126,7 @@
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
-        <div class="chosed">已选择
-          <span>0</span>件商品</div>
+        <div class="chosed">已选择 <span>0</span>件商品</div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
           <i class="summoney">0</i>
@@ -116,10 +140,31 @@
 </template>
 
 <script>
-  export default {
-    name: 'ShopCart',
+// 1. 静态搭建
+//    定义、注册(路由注册)、使用(两个入口: 添加购物车成功页面、header一个入口)
+// 2. 初始化数据展示
+//    2.1 api准备
+//    2.2 三连环
+//    2.3 页面初始化的时候调用actions拿数据
+//      发现问题: 没有数据回来,为什么?
+//      因为后端不知道你是谁,所以不知道给你返回哪个购物车中的东西
+//      购物车思路:
+//        1. 天猫,只要点页面,就得登录(目的:为了防止数据的爬取)
+//        2. 京东,当点击"加入购物车"此时必须登录
+//        3. 亚马逊,点击"加入购物车",跳转添加购物车成功页面,前往购物车页面,可以看到购物车中的商品
+//          注意: 此时是没有登录
+//    2.4 展示数据
+// 3. 交互
+import { mapActions } from 'vuex';
+export default {
+  name: "ShopCart",
+  mounted() {
+    this.getCartList()
+  },
+  methods: {
+    ...mapActions('cart', ['getCartList'])
   }
-
+};
 </script>
 
 <style lang="less" scoped>
@@ -288,7 +333,6 @@
           font-size: 16px;
         }
       }
-			
 
       .sumbtn {
         float: right;
