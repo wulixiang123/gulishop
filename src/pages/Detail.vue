@@ -24,7 +24,7 @@
         <div class="InfoWrap">
           <div class="goodsDetail">
             <h3 class="InfoName">
-              {{ skuInfo.skuName }}
+             {{ skuInfo.skuName }}
             </h3>
             <p class="news">
               推荐选择下方[移动优惠购],手机套餐齐搞定,不用换号,每月还有花费返
@@ -75,13 +75,21 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
+
               <dl v-for="saleAttr in spuSaleAttrList" :key="saleAttr.id">
                 <dt class="title">{{ saleAttr.saleAttrName }}</dt>
-                <dd changepirce="0" class="active"
-                v-for="saleAttrVal in saleAttr.spuSaleAttrValueList"
-                :key="saleAttrVal.id"
+                <dd
+                  changepirce="0"
+                  :class="{
+                    active: saleAttrVal.isChecked == '1'
+                  }"
+                  v-for="saleAttrVal in saleAttr.spuSaleAttrValueList"
+                  :key="saleAttrVal.id"
+                  @click="saleAttrValSel(saleAttrVal, saleAttr.spuSaleAttrValueList)"
                 >{{ saleAttrVal.saleAttrValueName }}</dd>
               </dl>
+
+
             </div>
             <div class="cartWrap">
               <div class="controls">
@@ -346,6 +354,12 @@
 //    3. mounted中调用actions,拿数据
 //    4. 渲染数据
 // 3. 交互
+//    3.1 放大镜(完成)
+//    3.2 小图列表点击(完成)
+//    3.3 销售属性点击(排他思想做)
+//        点击的销售属性值中的isChecked变为1
+//        其他的变为0
+//    3.4 添加购物车
 import ImageList from "./ImageList/ImageList";
 import Zoom from "./Zoom/Zoom";
 import { mapActions, mapGetters } from 'vuex'
@@ -360,8 +374,8 @@ export default {
       goodsId: null
     }
   },
-  computed:{
-    ...mapGetters('detail',['categoryView','skuInfo','spuSaleAttrList','skuImageList'])
+  computed: {
+    ...mapGetters('detail', ['categoryView', 'skuInfo', 'spuSaleAttrList', 'skuImageList'])
   },
   mounted() {
     // goodsId 先存一下
@@ -371,7 +385,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions('detail', ['getGoodsInfo'])
+    ...mapActions('detail', ['getGoodsInfo']),
+    saleAttrValSel(saleAttrVal, spuSaleAttrValueList) {
+      spuSaleAttrValueList.forEach(item => item.isChecked = '0')
+      saleAttrVal.isChecked = '1'
+    }
   }
 };
 </script>

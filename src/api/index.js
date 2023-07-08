@@ -24,3 +24,8 @@ export const reqSearchPage = (data={}) => {
 export const reqGoodsDetail = (skuId) => {
     return request.get(`/item/${skuId}`)
 }
+
+// 添加商品到购物车        goodsId goodsNum 
+export const reqAddCart = (skuId,skuNum) => {
+    return request.post(`/cart/addToCart/${ skuId }/${ skuNum }`)
+}
