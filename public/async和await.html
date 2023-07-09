@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+
+    // 函数加async修饰符,返回值是一个promise,这个promise我们叫做【async函数的promise】
+    // 那么【async函数的promise】成功和失败由谁来决定?
+    // 和函数的return的值有关系
+    // 1. return一个非promise值得时候,【async函数的promise】一定是成功的,该promise的值是return的值
+    // 2. return一个promise值
+    //          return的promise值是成功的,那么 【async函数的promise】 就是成功的,值是return的promise的值
+    //          return的promise值是失败的,那么 【async函数的promise】 就是失败的,值是return的promise的值
+    // 3. async函数内,如果抛出错误
+    //          那么 【async函数的promise】 就是失败的,值是抛出错误的值
+
+    // async function fn() {
+
+    //   // return undefined
+    //   // return 125
+    //   // return [3, 7]
+
+    //   // return Promise.resolve('哈哈')
+    //   // return Promise.reject('高圆圆')
+
+    //   throw 999
+    // }
+
+    // let res = fn()
+
+    // console.log(res)
+
+
+    // -------------------------------------------------------
+
+    // await 是等待的意思,不能够单独使用,必须在async函数中使用
+    // 1. await 可以跟一个非promise值,表达式得到的结果就是这个非promise值
+    // 2. await 可以跟一个成功promise值
+    //          promise是成功的,表达式得到的结果就是这个成功promise的值
+    //          注意: await只能跟成功的promise,如果失败,会把这个失败往外抛
+    //        可以跟一个pending状态的promise,等待这个promise出结果,
+    //            如果出不了,一直等,直到出结果
+    // 问:
+    // 如果跟一个失败的promsis就报错了,后续的代码无法执行,如何解决?
+    // 加 try ... catch ...
+    async function fn () {
+      // let res = await 5
+      // let res = await { name: '张三丰' }
+
+      // let res = await Promise.resolve('哈哈')
+      let res = await Promise.reject('高圆圆') //  throew '高圆圆'
+      // let res = await new Promise(() => {})
+
+      console.log(res)
+
+    }
+
+    fn()
+
+
+
+  </script>
+</body>
+</html>

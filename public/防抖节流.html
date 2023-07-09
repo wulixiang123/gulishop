@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <button id="btn">快点我</button>
+
+  <script>
+
+
+    // btn.onclick = function () {
+    //   console.log("抢购")
+    // }
+
+
+    // btn.onclick = debouce(function () {
+    //   console.log("抢购")
+    // }, 2000)
+
+    // 防抖
+    // 参数一: 要防抖的函数
+    // 参数二: 防抖的时间
+    // function debouce(fn, delay) {
+    //   var timer = null
+    //   return function () {
+    //     clearTimeout(timer)
+    //     timer = setTimeout(fn, delay)
+    //   }
+    // }
+
+    // --------------------------------------------------
+
+    btn.onclick = throttle(function () {
+      console.log('抢购', new Date().getSeconds() )
+    }, 1000)
+
+    // 节流函数
+    // 参数一: 要节流的函数
+    // 参数二: 节流的间隔时间
+    function throttle(fn, delay) {
+
+      var flag = true // true代表当前没有执行的回调
+
+      return function () {
+
+        if (!flag) { // flag进来如果是false的话,证明当前已经有回调在等待执行了,此时将不再执行新的等待
+          return
+        }
+
+        setTimeout(() => {
+          fn()
+          flag = true // 回调执行完毕之后,flag再次职位true,代表没有回调在等待执行了
+        }, delay)
+
+        flag = false // 点击一次之后,把flag置为false,证明当前已经有回调在等待执行了
+
+      }
+
+    }
+
+  </script>
+</body>
+</html>
