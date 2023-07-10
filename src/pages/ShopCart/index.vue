@@ -35,15 +35,16 @@
             <span class="price">{{ cart.skuPrice?.toFixed(2) }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <a href="javascript:void(0)" class="mins" @click="changeSkuNum(cart,-1)">-</a>
             <input
               autocomplete="off"
               type="text"
               minnum="1"
               class="itxt"
               :value="cart.skuNum"
+              @change="changeSkuNumHandler(cart,$event.target.value)"
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a href="javascript:void(0)" class="plus" @click="changeSkuNum(cart,1)">+</a>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ (cart.skuNum * cart.skuPrice)?.toFixed(2) }}</span>
@@ -139,7 +140,36 @@ export default {
     this.getCartList()
   },
   methods: {
-    ...mapActions('cart', ['getCartList', 'checkCart','deleteCart']),
+    ...mapActions('cart', ['getCartList', 'checkCart','deleteCart','addCart']),
+    // input框修改商品数量
+    async changeSkuNumHandler(cart,num){
+      let reg = /^[1-9]\d*$/
+      if(!reg.test(num)){
+        this.$forceUpdate()//强制刷新
+        alert('输入的商品数量不符合要求,请重新输入')
+        return
+      }
+      this.changeSkuNum(cart,num - cart.skuNum)
+    },
+    // 加减按钮修改商品数量
+    async changeSkuNum(cart,num){
+      if(cart.skuNum + num < 1){
+        alert('商品数量不能小于1')
+        return
+      }
+      try {
+        await this.addCart({
+          skuId:cart.skuId,
+          skuNum:num
+        })
+        alert('修改数量成功')
+        // 重新获取数据,渲染列表
+        this.getCartList()
+      } catch (error) {
+        console.error(error);
+        alert('修改商品数量失败')
+      }
+    },
     // 删除商品
     async deleteHandler(cart){
       try {
