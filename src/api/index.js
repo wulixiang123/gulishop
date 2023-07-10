@@ -56,3 +56,18 @@ export const reqBatchCheckCart = (isChecked,skuIdList) => {
 export const reqBatchDeleteCart = (skuIdList) => {
     return request.post(`/cart/batchDeleteCart`,skuIdList)
 }
+
+// 获取验证码
+export const reqCode = (phone) => {
+    return request.get(`/user/passport/sendCode/${phone}`)
+}
+
+// 注册
+export const reqRegister = (data) => {
+    return request.post(`/user/passport/register`,data)// data -> code、password、phone
+}
+
+// 登录
+export const reqLogin = (data) => {
+    return request.post(`/user/passport/login`,data)// data -> phone、password
+}
