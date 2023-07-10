@@ -9,6 +9,7 @@ import home from './modules/home'
 import search from "./modules/search";
 import detail from "./modules/detail";
 import cart from "./modules/cart";
+import user from "./modules/user";
 // 3. 创建并暴露
 export default new Vuex.Store({
     // 模块化
@@ -16,7 +17,8 @@ export default new Vuex.Store({
         home,
         search,
         detail,
-        cart
+        cart,
+        user
     }
 })
 // 4. 在创建vm实例的时候,进行关联(main.js)

@@ -2,6 +2,8 @@ import axios from "axios";
 import nProgress from "nprogress";
 import 'nprogress/nprogress.css'
 
+import store from "@/store";
+
 
 // 1. 配置基础路径和超时限制
 // 2. 添加进度条信息  nprogress
@@ -17,6 +19,13 @@ const request = axios.create({
 })
 // 请求拦截器
 request.interceptors.request.use((config)=>{
+
+    // config.headers -- > 请求头
+    // 注意: 请求头中携带的必须叫 userTempId(后端规定)
+    let userTempId = store.state.user.userTempId
+    if(userTempId){
+        config.headers.userTempId = userTempId
+    }
     nProgress.start()
     return config
 },(e)=>{
