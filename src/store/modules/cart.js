@@ -20,7 +20,7 @@ const actions = {
         console.log('接口返回的数据', result)
         // 这里等我们能看到返回的数据在写commit,不确定返回的内容是啥
         // 直接忙写,容易写错
-        // commit('SET_CARTLIST', result.data)
+        commit('SET_CARTLIST', result.data[0]?.cartInfoList)
       } else {
         console.error(error)
       }
