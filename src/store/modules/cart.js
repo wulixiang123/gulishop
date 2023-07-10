@@ -1,4 +1,4 @@
-import { reqAddCart, reqCartList } from "@/api"
+import { reqAddCart, reqCartList, reqCheckedCart } from "@/api"
 
 
 const state = {
@@ -12,6 +12,19 @@ const mutations = {
 }
 
 const actions = {
+  // 商品选中状态
+  async checkCart({ commit }, { skuId, isChecked }) {
+    try {
+      let result = await reqCheckedCart(skuId, isChecked)
+      if (result && result.code == 200) {
+        return 'ok'
+      }
+      return Promise.reject(result.message || '选中失败')
+    } catch (error) {
+      console.log(11)
+      return Promise.reject(error)
+    }
+  },
   // 购物车列表
   async getCartList({ commit }) {
     try {

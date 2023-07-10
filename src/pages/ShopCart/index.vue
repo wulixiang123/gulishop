@@ -11,12 +11,19 @@
         <div class="cart-th6">操作</div>
       </div>
       <div class="cart-body">
-        <ul class="cart-list"
-        v-for="cart in cartList"
-        :key="cart.id"
+        <ul
+          class="cart-list"
+          v-for="cart in cartList"
+          :key="cart.id"
         >
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="cart.isChecked"/>
+            <input 
+            type="checkbox" 
+            name="chk_list" 
+            :checked="cart.isChecked" 
+            @change="changeSkuCheck($event, cart)"
+            :key="Date.now()"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="cart.imgUrl" />
@@ -32,7 +39,6 @@
             <input
               autocomplete="off"
               type="text"
-              value="1"
               minnum="1"
               class="itxt"
               :value="cart.skuNum"
@@ -89,34 +95,65 @@
 //        3. 亚马逊,点击"加入购物车",跳转添加购物车成功页面,前往购物车页面,可以看到购物车中的商品
 //          注意: 此时是没有登录
 //    2.4 展示数据
+//        2.4.1 直接展示 - 拿着store中的数据直接循环展示
+//        2.4.2 计算展示 - 全选状态、选中个数、总价
 // 3. 交互
-import { mapActions,mapState } from 'vuex';
+//    3.1 商品的选中状态
+//        api准备
+//        三连环(一连环,只写一个actions即可)
+//        点击商品的选中状态,调用actions
+//    3.2 删除商品
+//    3.3 商品数量的修改(小心一点)
+//    3.4 全选、全不选
+//    3.5 删除选中商品
+//    3.6 结算
+import { mapActions, mapState } from 'vuex';
 export default {
   name: "ShopCart",
-  computed:{
-    ...mapState('cart',['cartList']),
-    // 全选
-    isSelAll(){
+  computed: {
+    ...mapState('cart', ['cartList']),
+    // 全选状态
+    isSelAll() {
       return this.cartList.every(cart => cart.isChecked)
     },
     // 选中个数
-    selCount(){
-      return this.cartList.reduce((pre,cur)=>{
-        return pre + cur.skuNum * cur.isChecked
-      },0)
+    selCount() {
+      return this.cartList.reduce((prev, cart) => {
+        //            数量        * 选中状态
+        return prev + cart.skuNum * cart.isChecked
+      }, 0)
     },
     // 总价
-    totalAmount(){
-      return this.cartList.reduce((pre,cur)=>{
-        return pre + cur.skuNum * cur.skuPrice * cur.isChecked
-      },0)
-    },
+    totalAmount() {
+      return this.cartList.reduce((prev, cart) => {
+        //            数量        *  单价          * 选中状态
+        return prev + cart.skuNum * cart.skuPrice * cart.isChecked
+      }, 0)
+    }
   },
   mounted() {
     this.getCartList()
   },
   methods: {
-    ...mapActions('cart', ['getCartList'])
+    ...mapActions('cart', ['getCartList', 'checkCart']),
+    // 商品的选中状态
+    async changeSkuCheck(e, cartInfo) {
+      try {
+        await this.checkCart({
+          skuId: cartInfo.skuId,
+          // skuId: "qweer",
+          isChecked: +e.target.checked // +的目的是为了把布尔值转成数值
+        })
+      } catch (error) {
+        alert('选中失败,请重试')
+        // 当没有网络的时候,选中失败
+        // 选中失败在这里使用try...catch可以让页面不报错
+        // 我们自己捕获到这个错误,进行处理,给用户提示
+        // 然后需要把之前取消选中的操作复原,如何做?
+        this.$forceUpdate()
+      }
+        
+    }
   }
 };
 </script>
