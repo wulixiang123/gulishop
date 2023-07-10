@@ -49,9 +49,13 @@
             <span class="sum">{{ (cart.skuNum * cart.skuPrice)?.toFixed(2) }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a
+             href="javascript:;" 
+             class="sindelet"
+             @click.prevent="deleteHandler(cart)"
+             >删除</a>
             <br />
-            <a href="#none">移到收藏</a>
+            <a href="javascript:;">移到收藏</a>
           </li>
         </ul>
       </div>
@@ -135,7 +139,17 @@ export default {
     this.getCartList()
   },
   methods: {
-    ...mapActions('cart', ['getCartList', 'checkCart']),
+    ...mapActions('cart', ['getCartList', 'checkCart','deleteCart']),
+    // 删除商品
+    async deleteHandler(cart){
+      try {
+        await this.deleteCart(cart.skuId)
+        this.getCartList()// 重新获取数据,渲染页面
+      } catch (error) {
+        alert('删除失败')
+      }
+    },
+
     // 商品的选中状态
     async changeSkuCheck(e, cartInfo) {
       try {

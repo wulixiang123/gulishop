@@ -1,4 +1,4 @@
-import { reqAddCart, reqCartList, reqCheckedCart } from "@/api"
+import { reqAddCart, reqCartList, reqCheckedCart,reqDeleteCart } from "@/api"
 
 
 const state = {
@@ -12,6 +12,18 @@ const mutations = {
 }
 
 const actions = {
+  // 删除商品
+  async deleteCart({commit},skuId){
+    try {
+      let result = await reqDeleteCart(skuId)
+      if(result && result.code == 200){
+        return 'ok'
+      }
+      return Promise.reject(result.message || '删除失败')
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  },
   // 商品选中状态
   async checkCart({ commit }, { skuId, isChecked }) {
     try {

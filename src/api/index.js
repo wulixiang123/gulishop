@@ -41,3 +41,8 @@ export const reqCartList = () => {
 export const reqCheckedCart = (skuId, isChecked) => {
   return request.get(`/cart/checkCart/${skuId}/${isChecked}`)
 }
+
+// 删除商品
+export const reqDeleteCart = (skuId) => {
+    return request.delete(`/cart/deleteCart/${skuId}`)
+}
