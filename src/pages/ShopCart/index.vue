@@ -63,13 +63,13 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="isSelAll"/>
+        <input class="chooseAll" type="checkbox" :checked="isSelAll" @change="changeCheckAll"/>
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
-        <a href="#none">移到我的关注</a>
-        <a href="#none">清除下柜商品</a>
+        <a href="javascript:;" @click="deleteCartSel">删除选中的商品</a>
+        <a href="javascript:;">移到我的关注</a>
+        <a href="javascript:;">清除下柜商品</a>
       </div>
       <div class="money-box">
         <div class="chosed">已选择 <span>{{ selCount }}</span>件商品</div>
@@ -140,9 +140,40 @@ export default {
     this.getCartList()
   },
   methods: {
-    ...mapActions('cart', ['getCartList', 'checkCart','deleteCart','addCart']),
+    ...mapActions('cart', ['getCartList', 'checkCart','deleteCart','addCart','batchCheckAll','batchDeleteSel']),
+    // 删除选中
+    async deleteCartSel(){
+      let skuIdList = this.cartList.filter(cart => cart.isChecked).map(cart => cart.skuId)
+      try {
+        await this.batchDeleteSel(skuIdList)
+        alert('批量删除成功')
+        this.getCartList()
+      } catch (error) {
+        console.error(error)
+        alert('批量删除失败')
+      }
+    },
+    // 全部选中
+    async changeCheckAll(e){
+      console.log(e.target.checked);
+      // 所有商品的id列表
+      let skuIdList = this.cartList.map(cart => cart.skuId)
+      console.log(skuIdList);
+      try {
+        await this.batchCheckAll({
+          isChecked:+e.target.checked,//转成数值
+          skuIdList
+        })
+        alert('修改全部商品选中状态成功')
+        this.getCartList()//刷新页面数据
+      } catch (error) {
+        console.error(error);
+        alert('修改全部商品选中状态失败')
+      }
+    },
     // input框修改商品数量
-    async changeSkuNumHandler(cart,num){
+    async changeSkuNumHandler(cart,num){// num 注意是输入的值
+      // input框不允许输入 小数、字符串、负数 和 0 正则校验
       let reg = /^[1-9]\d*$/
       if(!reg.test(num)){
         this.$forceUpdate()//强制刷新

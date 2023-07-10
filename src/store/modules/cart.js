@@ -1,4 +1,4 @@
-import { reqAddCart, reqCartList, reqCheckedCart,reqDeleteCart } from "@/api"
+import { reqAddCart, reqBatchCheckCart, reqBatchDeleteCart, reqCartList, reqCheckedCart,reqDeleteCart } from "@/api"
 
 
 const state = {
@@ -12,6 +12,30 @@ const mutations = {
 }
 
 const actions = {
+  // 删除选中商品
+  async batchDeleteSel({commit},skuIdList){
+    try {
+      let result = await reqBatchDeleteCart(skuIdList)
+      if(result && result.code == 200){
+        return 'ok'
+      }
+      return Promise.reject(result.message || '批量删除失败')
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  },
+  // 全选/非全选
+  async batchCheckAll({commit},{isChecked,skuIdList}){
+    try {
+      let result = await reqBatchCheckCart(isChecked,skuIdList)
+      if(result && result.code == 200){
+        return 'ok'
+      }
+      return Promise.reject(result.message || '选中失败')
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  },
   // 删除商品
   async deleteCart({commit},skuId){
     try {

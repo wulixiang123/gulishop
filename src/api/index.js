@@ -46,3 +46,13 @@ export const reqCheckedCart = (skuId, isChecked) => {
 export const reqDeleteCart = (skuId) => {
     return request.delete(`/cart/deleteCart/${skuId}`)
 }
+
+// 购物车全选、非全选
+export const reqBatchCheckCart = (isChecked,skuIdList) => {
+    return request.post(`/cart/batchCheckCart/${isChecked}`,skuIdList)
+}
+
+// 删除选中商品
+export const reqBatchDeleteCart = (skuIdList) => {
+    return request.post(`/cart/batchDeleteCart`,skuIdList)
+}
