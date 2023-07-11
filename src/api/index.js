@@ -76,3 +76,8 @@ export const reqLogin = (data) => {
 export const reqUserInfo = () => {
   return request.get(`/user/passport/auth/getUserInfo`)
 }
+
+// 获取交易信息
+export const reqTradeInfo = () => {
+  return request.get(`/order/auth/trade`)
+}

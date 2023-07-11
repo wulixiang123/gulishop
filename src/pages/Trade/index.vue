@@ -120,8 +120,22 @@
 </template>
 
 <script>
+// 1. 静态页面搭建
+//    定义、注册、使用(从"结算"跳转过来)
+// 2. 初始化数据展示
+//    api封装
+//    三连环
+//    页面初始化调用actions拿数据进行展示
+// 3. 交互
+import {mapActions} from 'vuex'
   export default {
     name: 'Trade',
+    mounted(){
+      this.getTradeInfo()
+    },
+    methods:{
+      ...mapActions('trade',['getTradeInfo'])
+    }
   }
 </script>
 
