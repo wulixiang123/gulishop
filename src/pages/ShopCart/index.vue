@@ -119,7 +119,7 @@ export default {
     ...mapState('cart', ['cartList']),
     // 全选状态
     isSelAll() {
-      return this.cartList.every(cart => cart.isChecked)
+      return this.cartList.every(cart => cart.isChecked) && this.cartList.length
     },
     // 选中个数
     selCount() {
