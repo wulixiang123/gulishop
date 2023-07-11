@@ -3,30 +3,25 @@
     <h3 class="title">填写并核对订单信息</h3>
     <div class="content">
       <h5 class="receive">收件人信息</h5>
-      <div class="address clearFix">
-        <span class="username selected">张三</span>
+
+      <div
+        class="address clearFix"
+        v-for="item in addressList"
+        :key="item.id"
+      >
+        <span
+          class="username"
+          :class="{
+            selected: item.isDefault == '1'
+          }"
+        >{{ item.consignee }}</span>
         <p>
-          <span class="s1">北京市昌平区宏福科技园综合楼6层</span>
-          <span class="s2">15010658793</span>
-          <span class="s3">默认地址</span>
+          <span class="s1">{{ item.fullAddress }}</span>
+          <span class="s2">{{ item.phoneNum }}</span>
+          <span class="s3" v-if="item.isDefault == '1' ">默认地址</span>
         </p>
       </div>
-      <div class="address clearFix">
-        <span class="username selected">李四</span>
-        <p>
-          <span class="s1">北京市昌平区宏福科技园综合楼6层</span>
-          <span class="s2">13590909098</span>
-          <span class="s3">默认地址</span>
-        </p>
-      </div>
-      <div class="address clearFix">
-        <span class="username selected">王五</span>
-        <p>
-          <span class="s1">北京市昌平区宏福科技园综合楼6层</span>
-          <span class="s2">18012340987</span>
-          <span class="s3">默认地址</span>
-        </p>
-      </div>
+
       <div class="line"></div>
       <h5 class="pay">支付方式</h5>
       <div class="address clearFix">
@@ -45,34 +40,22 @@
       </div>
       <div class="detail">
         <h5>商品清单</h5>
-        <ul class="list clearFix">
+        <ul
+          class="list clearFix"
+          v-for="item in detailArrayList"
+          :key="item.skuId"
+        >
           <li>
-            <img src="./images/goods.png" alt="">
+            <img :src="item.imgUrl" style="width: 60px;height: 60px;">
           </li>
           <li>
-            <p>
-              Apple iPhone 6s (A1700) 64G 玫瑰金色 移动联通电信4G手机硅胶透明防摔软壳 本色系列</p>
+            <p>{{ item.skuName }}</p>
             <h4>7天无理由退货</h4>
           </li>
           <li>
-            <h3>￥5399.00</h3>
+            <h3>￥{{ item.orderPrice?.toFixed(2) }}</h3>
           </li>
-          <li>X1</li>
-          <li>有货</li>
-        </ul>
-        <ul class="list clearFix">
-          <li>
-            <img src="./images/goods.png" alt="">
-          </li>
-          <li>
-            <p>
-              Apple iPhone 6s (A1700) 64G 玫瑰金色 移动联通电信4G手机硅胶透明防摔软壳 本色系列</p>
-            <h4>7天无理由退货</h4>
-          </li>
-          <li>
-            <h3>￥5399.00</h3>
-          </li>
-          <li>X1</li>
+          <li>X{{ item.skuNum }}</li>
           <li>有货</li>
         </ul>
       </div>
@@ -91,8 +74,8 @@
     <div class="money clearFix">
       <ul>
         <li>
-          <b><i>1</i>件商品，总商品金额</b>
-          <span>¥5399.00</span>
+          <b><i>{{ tradeInfo.totalNum }}</i>件商品，总商品金额</b>
+          <span>¥{{ tradeInfo.totalAmount?.toFixed(2) }}</span>
         </li>
         <li>
           <b>返现：</b>
@@ -105,12 +88,12 @@
       </ul>
     </div>
     <div class="trade">
-      <div class="price">应付金额:　<span>¥5399.00</span></div>
+      <div class="price">应付金额:　<span>¥{{ tradeInfo.totalAmount?.toFixed(2) }}</span></div>
       <div class="receiveInfo">
         寄送至:
-        <span>北京市昌平区宏福科技园综合楼6层</span>
-        收货人：<span>张三</span>
-        <span>15010658793</span>
+        <span>{{ defaultAddress.fullAddress }}</span>
+        收货人：<span>{{ defaultAddress.consignee }}</span>
+        <span>{{ defaultAddress.phoneNum }}</span>
       </div>
     </div>
     <div class="sub clearFix">
@@ -124,19 +107,39 @@
 //    定义、注册、使用(从"结算"跳转过来)
 // 2. 初始化数据展示
 //    api封装
+//        获取交易信息
+//        获取地址列表(写成mock,让我们可以用自己的账号有地址)
 //    三连环
-//    页面初始化调用actions拿数据进行展示
+//    页面初始化mounted调用actions拿 tradeInfo 和 addressList 数据
+//    展示数据:
+//        地址列表(默认地址和高亮)
+//        商品列表
+//        总价和商品个数
+//        配置地址(默认地址)
 // 3. 交互
-import {mapActions} from 'vuex'
-  export default {
-    name: 'Trade',
-    mounted(){
-      this.getTradeInfo()
-    },
-    methods:{
-      ...mapActions('trade',['getTradeInfo','getAddressList'])
+//    3.1 地址列表点击切换默认
+//    3.2 收集备注
+//    3.3 提交订单
+import { mapActions, mapGetters, mapState } from 'vuex'
+export default {
+  name: 'Trade',
+  computed: {
+    ...mapState('trade', ['addressList', 'tradeInfo']),
+    ...mapGetters('trade', ['detailArrayList']),
+    // 计算默认地址(默认地址就是配送地址)
+    defaultAddress() {
+      let ads = this.addressList.find(item => item.isDefault == '1')
+      return ads || {}
     }
+  },
+  mounted() {
+    this.getTradeInfo()
+    this.getAddressList()
+  },
+  methods: {
+    ...mapActions('trade', ['getTradeInfo', 'getAddressList'])
   }
+}
 </script>
 
 <style lang="less" scoped>

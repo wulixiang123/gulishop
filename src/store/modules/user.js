@@ -61,9 +61,12 @@ const actions = {
         // 第一次获取token的时候,直接把token存到localStorage中
         // 当刷新页面的时候,从localStorage中拿到token,放到store
         localStorage.setItem('TOKEN', result.data.token)
+        return
       }
+      return Promise.reject(result.message || '登陆失败')
     } catch (error) {
-      console.error(error)      
+      console.error(error)   
+      return Promise.reject(error)   
     }
   },
   // 注册

@@ -133,15 +133,23 @@ export default {
         return
       }
 
-      await this.login({
-        phone,
-        password
-      })
-      // // 获取个人信息
-      // this.getUserInfo()
-      this.$router.push('/home')
 
-      // 去首页,要展示个人信息 目前没有个人信息,在路由守卫中获取个人信息
+      try {
+        await this.login({
+          phone,
+          password
+        })
+        // // 获取个人信息
+        // this.getUserInfo()
+        this.$router.push('/home')
+  
+        // 去首页,要展示个人信息 目前没有个人信息,在路由守卫中获取个人信息
+        
+      } catch (error) {
+        alert('登陆失败')
+        console.error(error);
+      }
+
     },
   }
 };

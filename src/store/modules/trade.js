@@ -45,7 +45,12 @@ const actions = {
   }
 }
 
-const getters = {}
+const getters = {
+    // 计算商品列表
+    detailArrayList(state) {
+        return state.tradeInfo.detailArrayList || []
+      },
+}
 
 export default {
   namespaced: true,
