@@ -94,6 +94,9 @@ import { mapActions } from 'vuex';
 //              获取个人信息的接口是没有参数的,但是需要在请求头中携带token
 //          结果:
 //              把个人信息存起来,在header中展示
+//      ....
+//      三、学习路由守卫
+//      前提: 只要url的改变,就会重新去匹配路由,就会重新走路由守卫
 export default {
   name: "Login",
   data() {
