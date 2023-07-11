@@ -10,7 +10,7 @@ import { getUserTempId } from '@/utils/user'
 
 const state = {
   userTempId: getUserTempId(),
-  token: '',
+  token: localStorage.getItem('TOKEN'),
   userInfo: {}, // 存个人信息
 }
 
@@ -30,9 +30,12 @@ const actions = {
       let result = await reqUserInfo()
       if (result && result.code == 200) {
         commit('SET_USERINFO', result.data)
+        return 'ok'
       }
+      return Promise.reject(result.message || '获取用户信息失败')
     } catch (error) {
       console.error(error)
+      return Promise.reject(error)
     }
   },
   // 登录 - 获取token
@@ -43,6 +46,16 @@ const actions = {
       let result = await reqLogin(data)
       if (result && result.code == 200) {
         commit('SET_TOKEN', result.data.token)
+
+        // 登录状态保持,当刷新页面的时候,需要展示当前用户是登录的
+        // 会走路由守卫,在路由守卫中拿个人信息
+        //    路由守卫中拿个人信息的条件是 token存在,个人信息不存在
+        //    但是现在刷新页面,token在store中丢失了
+        //    我们只要保证token不丢失(store中有token),那么就会走获取个人信息的代码
+        // 解决方式:
+        // 第一次获取token的时候,直接把token存到localStorage中
+        // 当刷新页面的时候,从localStorage中拿到token,放到store
+        localStorage.setItem('TOKEN', result.data.token)
       }
     } catch (error) {
       console.error(error)      

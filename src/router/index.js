@@ -3,7 +3,7 @@
 // 2. 引入使用
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import routes from './routes'
+import routes from './routes' // 抽离routes
 import store from '@/store'
 Vue.use(VueRouter)
 
@@ -17,13 +17,14 @@ VueRouter.prototype.replace = function (location) {
   orginReplace.call(this, location).catch(() => {})
 }
 
-
 const router = new VueRouter({
-    routes,
-    scrollBehavior(to,from,savedPosition){
-        return {y:0}
-    }
+  routes,
+  // 滚动行为 - 控制页面滚动到什么位置
+  scrollBehavior (to, from, savedPosition) {
+    return { y: 0 }
+  }
 })
+
 
 // 全局前置守卫
 // to 是一个对象,是路由,去哪个路由的路由
@@ -36,27 +37,33 @@ const router = new VueRouter({
 //            path: '/login'
 //          })
 //      当传参的时候 next('/login') 不管你原来去哪,现在执行 next('/login'),都去login
-router.beforeEach(async function(to,from,next){
-    let token = store.state.user.token
-    if(token){ // 有token,代表登录了
+router.beforeEach(async function (to, from, next) {
+
+  let token = store.state.user.token
+  if (token) { // 有token,代表登录了
+
     // 判断有没有个人信息,有就放行,没有的话获取个人信息
-    let username = store.state.user.userInfo.username
-    if(username){// 有个人信息放行
-        next()
-    }else{// 没有个人信息,获取
-        try {
+    let username = store.state.user.userInfo.name
+    if (username) {// 有个人信息放行
+      next()
+    } else { // 没有个人信息,获取
+
+      try {
         // 等待获取个人信息
         await store.dispatch('user/getUserInfo')
         // 获取成功之后进行放行
         next()
-        } catch (error) {// 没有个人信息,获取
-            next()// 先放行,先不做处理
-        }
+      } catch (error) {
+        next() // 先放行,先不做处理
+      }
     }
-    }else{// 没有token,代表没有登录
-        next()
-        // 这里没有token不能直接去login,会死循环,目前先放行,后续在加条件
-        // next('/login')
+
+  } else { // 没有token,代表没有登录
+
+    next()
+    
+    // 这里没有token不能直接去login,会死循环,目前先放行,后续在加条件
+    // next('/login')
 
   }
   // next('/login') 不能直接跳转到login,因为url变化,只要路由变化就会重新走守卫,造成死循环

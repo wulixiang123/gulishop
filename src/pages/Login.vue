@@ -97,6 +97,21 @@ import { mapActions } from 'vuex';
 //      ....
 //      三、学习路由守卫
 //      前提: 只要url的改变,就会重新去匹配路由,就会重新走路由守卫
+//      理解 to from next 三个参数
+//      四、全局前置守卫
+//          登录的时候,之前是在登录完成后,调用的获取个人信息的接口  -- 这个做法是错误的
+//          在路由跳转的时候(路由前置守卫中),获取个人信息
+//          先走正确的流程:
+//          1. 书写路由守卫
+//              1.1 判断token是否存在,不存在就放心,存在判断是否有个人信息
+//              1.2 判断有没有个人信息,有个人信息就放行
+//                  没有个人信息就获取个人信息(调用store中的actions)
+//                  注意: store中获取个人信息的actions一定要reutrn失败的promise
+//                        因为我们这里需要接收到
+//          2. 当刷新页面时候,丢失了用户信息和token
+//             期望: 当刷新页面的时候还是存在个人信息的
+//              把token第一次获取到的时候存到loaclStorage中
+//              当再次刷新页面的时候,state中的token直接去 localStorage中取token
 export default {
   name: "Login",
   data() {
@@ -118,8 +133,9 @@ export default {
         phone,
         password
       })
-      // 获取个人信息
-      this.getUserInfo()
+      // // 获取个人信息
+      // this.getUserInfo()
+      this.$router.push('/home')
     },
   }
 };
