@@ -1,6 +1,7 @@
 import Mock from 'mockjs'
 import bannerList from './bannerList.json'
 import floorList from './floorList.json'
+import addressList from './addressList.json'
 // 造了个假接口, 一个url对应一个回调
 Mock.mock('/mock/getUserinfo',function(){
     return {
@@ -28,3 +29,12 @@ Mock.mock('/mock/getFloorList',function(){
         message:'success'
     }
 })
+
+// 准备地址列表
+Mock.mock(`/mock/user/userAddress/auth/findUserAddressList`, function () {
+    return {
+      code: 200,
+      data: addressList,
+      message: 'success'
+    }
+  })

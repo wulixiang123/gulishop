@@ -81,3 +81,9 @@ export const reqUserInfo = () => {
 export const reqTradeInfo = () => {
   return request.get(`/order/auth/trade`)
 }
+
+// 获取地址列表
+export const reqAddressList = () => {
+  // return request.get(`/user/userAddress/auth/findUserAddressList`) // 真实的
+  return mockRequest.get(`/user/userAddress/auth/findUserAddressList`) // mock数据
+}

@@ -134,7 +134,7 @@ import {mapActions} from 'vuex'
       this.getTradeInfo()
     },
     methods:{
-      ...mapActions('trade',['getTradeInfo'])
+      ...mapActions('trade',['getTradeInfo','getAddressList'])
     }
   }
 </script>
