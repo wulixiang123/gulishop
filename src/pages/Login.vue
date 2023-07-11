@@ -96,7 +96,7 @@ import { mapActions } from 'vuex';
 //              把个人信息存起来,在header中展示
 //      ....
 //      三、学习路由守卫
-//      前提: 只要url的改变,就会重新去匹配路由,就会重新走路由守卫
+//      前提: 【只要路由的改变,就会重新去匹配路由,就会重新走路由守卫】
 //      理解 to from next 三个参数
 //      四、全局前置守卫
 //          登录的时候,之前是在登录完成后,调用的获取个人信息的接口  -- 这个做法是错误的
@@ -112,6 +112,10 @@ import { mapActions } from 'vuex';
 //             期望: 当刷新页面的时候还是存在个人信息的
 //              把token第一次获取到的时候存到loaclStorage中
 //              当再次刷新页面的时候,state中的token直接去 localStorage中取token
+//          注意:
+//              路由走守卫的时候 from 是从哪里来
+//              例如 from 从 /login 来 在经过一系列逻辑之后,调用 next('/login') 取login
+//                  此时是不从新走路由守卫的,不会发生死循环
 export default {
   name: "Login",
   data() {
@@ -136,6 +140,8 @@ export default {
       // // 获取个人信息
       // this.getUserInfo()
       this.$router.push('/home')
+
+      // 去首页,要展示个人信息 目前没有个人信息,在路由守卫中获取个人信息
     },
   }
 };

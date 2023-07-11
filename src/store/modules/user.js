@@ -24,6 +24,11 @@ const mutations = {
 }
 
 const actions = {
+  // 清除token
+  clearToken({commit}){
+    commit('SET_TOKEN','')// 清除store中的token
+    localStorage.removeItem('TOKEN')// 清除localStorage中的token
+  },
   // 获取个人信息
   async getUserInfo({ commit }) {
     try {

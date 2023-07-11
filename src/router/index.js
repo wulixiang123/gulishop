@@ -46,21 +46,42 @@ router.beforeEach(async function (to, from, next) {
     let username = store.state.user.userInfo.name
     if (username) {// 有个人信息放行
       next()
-    } else { // 没有个人信息,获取
+    } else { // 没有个人信息就需要重新获取个人信息
 
       try {
         // 等待获取个人信息
         await store.dispatch('user/getUserInfo')
-        // 获取成功之后进行放行
-        next()
+        // 正常await没有报错,证明接口调用成功
+        next()// 去首页,放行(刚刚就是想去首页)
       } catch (error) {
-        next() // 先放行,先不做处理
+        // 请求失败,证明当前获取个人信息没有获取到
+        // 什么情况下会走进catch?
+        // 1. 网断了
+        // 2. token错误 -- 模拟token失效
+        // next('/login') 不能直接去/login,为啥? 会死循环?
+
+        // token错误的(失效的)获取个人信息失败,走catch
+        // 走catch又去走路由守卫
+        // 进入路由守卫后,拿token,拿的是错误的token
+        // 判断有没有个人信息,没有个人信息,获取个人信息
+        // 拿着token错误的(失效的)发请求获取个人信息
+
+        // token错误的(失效的)获取个人信息失败,走catch
+        // 走catch又去走路由守卫
+        // 进入路由守卫后,拿token,拿的是错误的token
+        // 判断有没有个人信息,没有个人信息,获取个人信息
+        // 拿着token错误的(失效的)发请求获取个人信息
+        // ...
+
+        // 解决:
+        // 直接把token清除掉,当下一次进入路由守卫的时候,先判断有没有token,没有,直接放行
+        store.dispatch('user/clearToken')
+        next('/login') // 先放行,先不做处理
       }
     }
-
   } else { // 没有token,代表没有登录
-
-    next()
+    // next('/login')  不能直接跳转/login,会死循环
+    next()// 目前先直接放行,等后续再改这块
     
     // 这里没有token不能直接去login,会死循环,目前先放行,后续在加条件
     // next('/login')
@@ -68,6 +89,15 @@ router.beforeEach(async function (to, from, next) {
   }
   // next('/login') 不能直接跳转到login,因为url变化,只要路由变化就会重新走守卫,造成死循环
 })
+
+// 死循环代码 - 为什么?
+// 路由发生变化
+// from -> /
+// to -> /login
+// router.beforeEach(async function (to, from, next) {
+//   next('/login')
+// })
+
 
 // 全局解析守卫
 // router.beforeResolve(function(to, from, next) {
