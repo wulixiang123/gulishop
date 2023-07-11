@@ -26,6 +26,13 @@ request.interceptors.request.use((config)=>{
     if(userTempId){
         config.headers.userTempId = userTempId
     }
+    // 请求头携带token
+    let token = store.state.user.token
+    if(token){
+        config.headers.token = token
+    }
+
+
     nProgress.start()
     return config
 },(e)=>{

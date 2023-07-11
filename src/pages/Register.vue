@@ -16,7 +16,13 @@
       <div class="content">
         <label>验证码:</label>
         <input type="text" placeholder="请输入验证码" v-model="userinfo.code"/>
-        <button style="height: 38px;padding: 0 10px;" @click="getCodeHandler">获取验证码</button>
+        <button 
+        style="height: 38px;padding: 0 10px;" 
+        @click="getCodeHandler"
+        :disabled="!!count"
+        >
+        {{ count ? `${count}秒之后可重新发送` :`获取验证码`}}
+      </button>
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
@@ -77,7 +83,9 @@ export default {
         password: '', // 密码
         repassword: '', // 重复密码
         isAgree: true // 默认同意协议
-      }
+      },
+      count:0,
+      timer:null
     }
   },
   methods: {
@@ -88,6 +96,14 @@ export default {
         alert('请输入手机号')
         return
       }
+
+      this.count = 10
+      this.timer = setInterval(()=>{
+        this.count--
+        if(this.count == 0){
+          clearInterval(this.timer)
+        }
+    },1000)
 
       try {
         this.userinfo.code = await this.getCode(this.userinfo.phone)

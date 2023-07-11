@@ -3,7 +3,20 @@
     <!-- 头部的第一行 -->
     <div class="top">
       <div class="container">
-        <div class="loginList">
+
+        
+        <div class="loginList" v-if="$store.state.user.userInfo.name">
+          <p>尚品汇欢迎您！</p>
+          <p>
+            <span>欢迎&nbsp;&nbsp;</span>
+            <a href="javascript:;">{{ $store.state.user.userInfo.name }}</a>
+            <a href="javascript:;" class="register">退出登录</a>
+          </p>
+        </div>
+
+
+
+        <div class="loginList" v-else>
           <p>尚品汇欢迎您！</p>
           <p>
             <span>请</span>
@@ -11,9 +24,14 @@
             <router-link to="/register" class="register">免费注册</router-link>
           </p>
         </div>
+
+
+
+
+
         <div class="typeList">
           <a href="javascript:;">我的订单</a>
-          <router-link to="/shopcart"></router-link>
+          <router-link to="/shopcart">我的购物车</router-link>
           <a href="javascript:;">我的尚品汇</a>
           <a href="javascript:;">尚品汇会员</a>
           <a href="javascript:;">企业采购</a>
@@ -27,7 +45,7 @@
     <div class="bottom">
       <h1 class="logoArea">
         <router-link to="/home" class="logo" title="尚品汇">
-            <img src="./images/logo.png" alt="" />
+          <img src="./images/logo.png"/>
         </router-link>
       </h1>
       <div class="searchArea">
@@ -50,132 +68,133 @@
 <script>
 export default {
   name: "Header",
-  data(){
-    return{
-        keyword:''
+  data() {
+    return {
+      keyword: ''
     }
   },
-  methods:{
-    toSearch(){
-        // 测试带参 - params和query都测试, 把keyword传递过去
-        // this.$route.push(`/search/${ this.keyword }?text=${ this.keyword }`)
+  methods: {
+    toSearch() {
 
-        let location = {
-          name:'Search',
-          params:{
-            keyword:this.keyword || undefined
-          }
+      // 测试带参 - params和query都测试, 把keyword传递过去
+      // this.$router.push(`/search/${ this.keyword }?text=${ this.keyword }`)
+
+      
+      let location = {
+        name: "Search",
+        params: {
+          keyword: this.keyword || undefined
         }
-        // 如果路由中带有query参数
-        if(this.$router.query){
-            location.query = this.$route.query
-            }
-            
-        // 首页要历史记录,搜索页不要历史记录
-        if(this.$route.path == '/home'){
-          this.$router.push(location)
-        }else{
-          this.$router.replace(location)
-        }
+      }
+      // 如果路由中带有query参数,我们不丢失掉
+      if (this.$route.query) {
+        location.query = this.$route.query
+      }
+
+
+      if (this.$route.path == '/home') {
+        this.$router.push(location)
+      } else {
+        this.$router.replace(location)
+      }
+
     }
   }
 };
 </script>
 
-<style scoped lang="less">
+<style lang="less" scoped>
 .header {
-        &>.top {
-            background-color: #eaeaea;
-            height: 30px;
-            line-height: 30px;
+  & > .top {
+    background-color: #eaeaea;
+    height: 30px;
+    line-height: 30px;
 
-            .container {
-                width: 1200px;
-                margin: 0 auto;
-                overflow: hidden;
+    .container {
+      width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
 
-                .loginList {
-                    float: left;
+      .loginList {
+        float: left;
 
-                    p {
-                        float: left;
-                        margin-right: 10px;
+        p {
+          float: left;
+          margin-right: 10px;
 
-                        .register {
-                            border-left: 1px solid #b3aeae;
-                            padding: 0 5px;
-                            margin-left: 5px;
-                        }
-                    }
-                }
-
-                .typeList {
-                    float: right;
-
-                    a {
-                        padding: 0 10px;
-
-                        &+a {
-                            border-left: 1px solid #b3aeae;
-                        }
-                    }
-
-                }
-
-            }
+          .register {
+            border-left: 1px solid #b3aeae;
+            padding: 0 5px;
+            margin-left: 5px;
+          }
         }
+      }
 
-        &>.bottom {
-            width: 1200px;
-            margin: 0 auto;
-            overflow: hidden;
+      .typeList {
+        float: right;
 
-            .logoArea {
-                float: left;
+        a {
+          padding: 0 10px;
 
-                .logo {
-                    img {
-                        width: 175px;
-                        margin: 25px 45px;
-                    }
-                }
-            }
-
-            .searchArea {
-                float: right;
-                margin-top: 35px;
-
-                .searchForm {
-                    overflow: hidden;
-
-                    input {
-                        box-sizing: border-box;
-                        width: 490px;
-                        height: 32px;
-                        padding: 0px 4px;
-                        border: 2px solid #ea4a36;
-                        float: left;
-
-                        &:focus {
-                            outline: none;
-                        }
-                    }
-
-                    button {
-                        height: 32px;
-                        width: 68px;
-                        background-color: #ea4a36;
-                        border: none;
-                        color: #fff;
-                        float: left;
-                        cursor: pointer;
-
-                        &:focus {
-                            outline: none;
-                        }
-                    }
-                }
-            }
+          & + a {
+            border-left: 1px solid #b3aeae;
+          }
         }
+      }
     }
+  }
+
+  & > .bottom {
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+
+    .logoArea {
+      float: left;
+
+      .logo {
+        img {
+          width: 175px;
+          margin: 25px 45px;
+        }
+      }
+    }
+
+    .searchArea {
+      float: right;
+      margin-top: 35px;
+
+      .searchForm {
+        overflow: hidden;
+
+        input {
+          box-sizing: border-box;
+          width: 490px;
+          height: 32px;
+          padding: 0px 4px;
+          border: 2px solid #ea4a36;
+          float: left;
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        button {
+          height: 32px;
+          width: 68px;
+          background-color: #ea4a36;
+          border: none;
+          color: #fff;
+          float: left;
+          cursor: pointer;
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+    }
+  }
+}
 </style>

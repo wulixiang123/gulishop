@@ -73,28 +73,51 @@ import { mapActions } from 'vuex';
 // 2. 初始化数据展示(无)
 // 3. 交互
 //      收集表单数据,点击"登录"获取token
+//      登录流程
+//      一、 调用登录接口
+//      用户输入账号和密码点击登录,调用登录接口,得到 token
+//      只要能拿到token就代表登录成功
+//      但是 目前没有获取到用户信息,需要我们拿着token调用获取用户信息的接口去拿用户信息
+//          步骤:
+//              1. api准备
+//              2. 三连环
+//              3. 点击"登录"按钮调用接口
+//          结果:
+//              需要把token存储起来
+//      二、获取个人信息
+//      拿着token(前提是有token),发请求获取个人信息
+//          步骤:
+//              1. api准备
+//              2. 三连环
+//              3. 获取到的个人信息存储起来(header组件要用 - 展示个人信息)
+//          注意: 
+//              获取个人信息的接口是没有参数的,但是需要在请求头中携带token
+//          结果:
+//              把个人信息存起来,在header中展示
 export default {
   name: "Login",
   data() {
     return {
-      phone: '',
-      password: ''
+      phone: '13700000000',
+      password: '111111'
     }
   },
   methods: {
-    ...mapActions('user', ['login']),
-    loginHandler() {
-      const { phone, password } = this
-      if ( !(phone && password) ) {
+    ...mapActions('user', ['login','getUserInfo']),
+    async loginHandler(){
+      const {phone,password} = this
+      if(!(phone && password)){
         alert('请输入完整信息')
         return
       }
 
-      this.login({
+      await this.login({
         phone,
         password
       })
-    }
+      // 获取个人信息
+      this.getUserInfo()
+    },
   }
 };
 </script>

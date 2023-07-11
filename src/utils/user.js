@@ -3,7 +3,7 @@
 // 创建一个标识
 // 标识的特点:
 // 1. 唯一(uuid)
-// 2. 不能老变
+// 2. 不能老变(存储localStorage)
 
 import {v4 as uuidv4} from 'uuid'
 

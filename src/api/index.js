@@ -71,3 +71,8 @@ export const reqRegister = (data) => {
 export const reqLogin = (data) => {
     return request.post(`/user/passport/login`,data)// data -> phone、password
 }
+
+// 获取个人信息
+export const reqUserInfo = () => {
+  return request.get(`/user/passport/auth/getUserInfo`)
+}
