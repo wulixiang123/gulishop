@@ -78,7 +78,8 @@
           <i class="summoney">{{ totalAmount }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <!-- <a  href="###" target="_blank">结算</a> -->
+          <router-link to="/trade" class="sum-btn">结算</router-link>
         </div>
       </div>
     </div>
@@ -112,6 +113,12 @@
 //    3.4 全选、全不选
 //    3.5 删除选中商品
 //    3.6 结算
+//        按道理来说,我们写完了登录注册,此时点击"结算"按钮,应该去登录，
+//        但是需要做登录限制的页面有很多: 结算页面(交易页面)、支付页面、支付成功页面、个人中心页面
+//        如果现在加限制条件,后期还得改
+//        所以这里不加"结算"按钮的限制条件,到最后所有的页面写完之后再加
+//        但这里要知道,点击结算跳转 交易页面 必须登录,现在记住手动登录
+//        点击跳转交易页面
 import { mapActions, mapState } from 'vuex';
 export default {
   name: "ShopCart",

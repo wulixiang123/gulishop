@@ -38,7 +38,7 @@ const router = new VueRouter({
 //          })
 //      当传参的时候 next('/login') 不管你原来去哪,现在执行 next('/login'),都去login
 router.beforeEach(async function (to, from, next) {
-
+// debugger
   let token = store.state.user.token
   if (token) { // 有token,代表登录了
 

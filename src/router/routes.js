@@ -5,6 +5,7 @@ import Search from '@/pages/Search.vue'
 import Detail from '@/pages/Detail.vue'
 import AddCartSuccess from '@/pages/AddCartSuccess'
 import ShopCart from '@/pages/ShopCart'
+import Trade from '@/pages/Trade'
 
 export default[
     {
@@ -32,6 +33,10 @@ export default[
     {
         path:'/shopcart',
         component:ShopCart
+    },
+    {
+        path:'/trade',
+        component:Trade
     },
     {
         path:'/register',
