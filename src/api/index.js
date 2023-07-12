@@ -97,3 +97,8 @@ export const reqLogout = () => {
 export const reqSubmitOrder = (tradeNo, data) => {
   return request.post(`/order/auth/submitOrder?tradeNo=${tradeNo}`, data)
 }
+
+// 获取支付信息
+export const reqPayInfo = (orderId) => {
+return request.get(`/payment/weixin/createNative/${orderId}`)
+}

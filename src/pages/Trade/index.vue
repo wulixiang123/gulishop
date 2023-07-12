@@ -166,10 +166,12 @@ export default {
         paymentWay: "ONLINE" // 写死,在线支付
       }
       try {
+        // let result = await reqSubmitOrder() // 这么做是没有问题的,但是我们不这么做,这么做每次用api的时候都需要引入
         let result = await this.$api.reqSubmitOrder(this.tradeInfo.tradeNo, data)
         if(result && result.code == 200){
+          alert('提交订单成功,即将跳转支付页面')
           // 跳转页面 - 注意: result.data 是生成的订单号,需要携带到下一个支付页面,通过路由的query带参
-          // this.$router.push(`/支付?orderId=${result.data}`)
+          this.$router.push(`/pay?orderId=${result.data}`)
         }else{
           alert(`提交订单失败:${result.message}`);
           console.error(result);
