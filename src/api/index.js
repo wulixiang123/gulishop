@@ -87,3 +87,8 @@ export const reqAddressList = () => {
   // return request.get(`/user/userAddress/auth/findUserAddressList`) // 真实的
   return mockRequest.get(`/user/userAddress/auth/findUserAddressList`) // mock数据
 }
+
+// 获取
+export const reqLogout = () => {
+  return request.get(`/user/passport/logout`)
+}
