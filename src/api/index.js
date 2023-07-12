@@ -107,3 +107,8 @@ return request.get(`/payment/weixin/createNative/${orderId}`)
 export const reqPayStatus = (orderId) => {
   return request.get(`/payment/weixin/queryPayStatus/${orderId}`)
 }
+
+// 获取订单列表
+export const reqOrderList = (page, limit) => {
+  return request.get(`/order/auth/${page}/${limit}`)
+}
