@@ -79,7 +79,7 @@
         </div>
       </div>
     </div>
-    <img :src="imgUrl" alt="">
+    <!-- <img :src="imgUrl" alt=""> -->
   </div>
 </template>
 
@@ -104,6 +104,27 @@
 //                    QRcode.toDataURL(要转成二维码的字符串).then().catch()
 //                    同时支持async和await
 //        2. 弹框
+//                1. 下载安装
+//                    npm i element-ui
+//                2. 引入使用
+//                      全部引入
+//                          import ElementUI from 'element-ui';
+//                          import 'element-ui/lib/theme-chalk/index.css';
+//                          Vue.use(ElementUI);
+//                      按需引入
+//                          按需引入的组件分为两种情况
+//                          import 'element-ui/lib/theme-chalk/index.css';
+//                          import { Button, MessageBox, Message } from 'element-ui';
+//                          // 大多数组件通过 Vue.component 或 Vue.use 可以使用
+//                          Vue.component(Button.name, Button); // --> Vue.use(Button)
+//                          // 只有少部分组件需要挂载Vue的原型上
+//                          Vue.prototype.$msgbox = MessageBox;
+//                          Vue.prototype.$alert = MessageBox.alert;
+//                          Vue.prototype.$confirm = MessageBox.confirm;
+//                          Vue.prototype.$prompt = MessageBox.prompt;
+//                          Vue.prototype.$message = Message;
+//                3. 在回调中使用
+//                    this.$confirm({ 配置项 })
 //    两个内容分别去做,做完之后再把立即支付的逻辑写一写
 // #endregion
 import QRcode from 'qrcode'
@@ -111,9 +132,9 @@ import QRcode from 'qrcode'
     name: 'Pay',
     data(){
       return{
-        orderId:'',
-        payInfo:{},
-        imgUrl:''
+        orderId:'',// 订单ID
+        payInfo:{},// 支付信息
+        imgUrl:'',// 存二维码图片
       }
     },
     mounted(){
@@ -124,15 +145,36 @@ import QRcode from 'qrcode'
       }
     },
     methods:{
-      toPay(){
-        QRcode.toDataURL(this.payInfo.codeUrl)
-        .then(res=>{
-          this.imgUrl = res
-        })
-        .catch(err=>{
-          console.log(err);
-        })
-      },
+      async toPay(){
+        // 二维码
+      // QRcode.toDataURL('我爱你,高圆圆!')
+      // QRcode.toDataURL(this.payInfo.codeUrl)
+      // .then(res => {
+      //   this.imgUrl = res
+      // })
+      // .catch(err => {
+      //   console.log('err -> ', err)
+      // })
+
+      this.imgUrl = await QRcode.toDataURL(this.payInfo.codeUrl)
+      // -----------------------
+      // 弹框
+      this.$confirm(`<img src="${ this.imgUrl }"/>`, '使用微信支付', {
+        closeOnPressEscape: false, // 是否允许点击ESC关闭弹框
+        closeOnClickModal: false, // 是否允许点击遮罩关闭弹框
+        showClose: false, // 隐藏右上角x按钮
+        dangerouslyUseHTMLString: true, // 解析HTML
+        confirmButtonText: '我已支付成功',
+        cancelButtonText: '支付遇到问题',
+        center: true // 居中
+      })
+      .then((res) => {
+        console.log('res', res)
+      })
+      .catch((err) => {
+        console.log('err', err)
+      })
+    },
       async initData(){
         try {
           let result = await this.$api.reqPayInfo(this.orderId)
