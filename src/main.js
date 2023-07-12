@@ -4,6 +4,9 @@ import router from './router'
 import store from './store'
 import '@/mock'
 
+import * as api from '@/api'
+Vue.prototype.$api = api
+
 // Vue.js中的全局注册是指将组件注册到全局，
 // 这样在任何新创建的Vue根实例(new Vue)的模板中都可以使用。
 // 全局注册通过Vue.component来创建组件

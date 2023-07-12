@@ -8,6 +8,7 @@
         class="address clearFix"
         v-for="item in addressList"
         :key="item.id"
+        @click="changeDefaultAddress(item, addressList)"
       >
         <span
           class="username"
@@ -34,8 +35,9 @@
       <div class="way">
         <h5>配送方式</h5>
         <div class="info clearFix">
-          <span class="s1">天天快递</span>
+          <span class="s1">顺丰快递</span>
           <p>配送时间：预计8月10日（周三）09:00-15:00送达</p>
+          <!-- <p>配送时间：预计{{date}}送达</p> -->
         </div>
       </div>
       <div class="detail">
@@ -61,7 +63,7 @@
       </div>
       <div class="bbs">
         <h5>买家留言：</h5>
-        <textarea placeholder="建议留言前先与商家沟通确认" class="remarks-cont"></textarea>
+        <textarea placeholder="建议留言前先与商家沟通确认" class="remarks-cont" v-model="remark"></textarea>
 
       </div>
       <div class="line"></div>
@@ -97,7 +99,8 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <!-- <router-link class="subBtn" to="/pay">提交订单</router-link> -->
+      <a href="javascript:;" class="subBtn" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -120,9 +123,18 @@
 //    3.1 地址列表点击切换默认
 //    3.2 收集备注
 //    3.3 提交订单
+//        api准备
+//        点击"提交订单"调用api,api调用成功之后,代表创建订单成功
+//        创建订单成功之后,跳转支付页面
 import { mapActions, mapGetters, mapState } from 'vuex'
+// import { reqSubmitOrder } from '@/api'
 export default {
   name: 'Trade',
+  data(){
+    return{
+      remark:'',//买家备注
+    }
+  },
   computed: {
     ...mapState('trade', ['addressList', 'tradeInfo']),
     ...mapGetters('trade', ['detailArrayList']),
@@ -137,7 +149,35 @@ export default {
     this.getAddressList()
   },
   methods: {
-    ...mapActions('trade', ['getTradeInfo', 'getAddressList'])
+    ...mapActions('trade', ['getTradeInfo', 'getAddressList']),
+    // 修改默认地址 - 排他思想
+    changeDefaultAddress(address, addressList) {
+      addressList.forEach(item => item.isDefault = '0')
+      address.isDefault = '1'
+    },
+    // 提交订单
+    async submitOrder(){
+      let data = {
+        consignee: this.defaultAddress.consignee, // 默认地址(计算出来的)得到
+        consigneeTel: this.defaultAddress.phoneNum, // 默认地址(计算出来的)得到
+        deliveryAddress:  this.defaultAddress.fullAddress, // 默认地址(计算出来的)得到
+        orderComment: this.remark, // 买家备注 - 数据是直接v-model收集
+        orderDetailList: this.detailArrayList, // 商品列表
+        paymentWay: "ONLINE" // 写死,在线支付
+      }
+      try {
+        let result = await this.$api.reqSubmitOrder(this.tradeInfo.tradeNo, data)
+        if(result && result.code == 200){
+          // 跳转页面 - 注意: result.data 是生成的订单号,需要携带到下一个支付页面,通过路由的query带参
+          // this.$router.push(`/支付?orderId=${result.data}`)
+        }else{
+          alert(`提交订单失败:${result.message}`);
+          console.error(result);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
   }
 }
 </script>

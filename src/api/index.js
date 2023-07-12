@@ -92,3 +92,8 @@ export const reqAddressList = () => {
 export const reqLogout = () => {
   return request.get(`/user/passport/logout`)
 }
+
+// 提交订单
+export const reqSubmitOrder = (tradeNo, data) => {
+  return request.post(`/order/auth/submitOrder?tradeNo=${tradeNo}`, data)
+}
