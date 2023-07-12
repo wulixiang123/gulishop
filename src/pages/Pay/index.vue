@@ -65,7 +65,8 @@
         <div class="hr"></div>
 
         <div class="submit">
-          <router-link class="btn" to="/paysuccess">立即支付</router-link>
+          <!-- <router-link class="btn" to="/paysuccess">立即支付</router-link> -->
+          <a href="javascript:;" class="btn" @click="toPay">立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
@@ -78,12 +79,75 @@
         </div>
       </div>
     </div>
+    <img :src="imgUrl" alt="">
   </div>
 </template>
 
 <script>
+// #region
+// 1. 静态页面搭建
+//    定义、注册(路由注册)、使用(从交易页面提交订单成功之后使用 编程式 导航跳转到当前页)
+//    注意: 跳转过来携带了query orderId参数(订单id),先拿到存起来,不确定后续有没有用
+// 2. 初始化数据展示
+//    api准备
+//    初始化页面的时候调用api
+//        展示的有 订单id 和 应付金额
+//        点击"立即支付"是交互弹框
+// 3. 交互
+//    点击"立即支付"
+//        1. 展示二维码
+//            步骤:
+//                1. 下载安装
+//                    npm i qrcode
+//                2. 引入使用
+//                    import QRcode from 'qrcode'
+//                    QRcode.toDataURL(要转成二维码的字符串).then().catch()
+//                    同时支持async和await
+//        2. 弹框
+//    两个内容分别去做,做完之后再把立即支付的逻辑写一写
+// #endregion
+import QRcode from 'qrcode'
   export default {
     name: 'Pay',
+    data(){
+      return{
+        orderId:'',
+        payInfo:{},
+        imgUrl:''
+      }
+    },
+    mounted(){
+      this.orderId = this.$route.query.orderId
+
+      if(this.orderId){
+        this.initData()
+      }
+    },
+    methods:{
+      toPay(){
+        QRcode.toDataURL(this.payInfo.codeUrl)
+        .then(res=>{
+          this.imgUrl = res
+        })
+        .catch(err=>{
+          console.log(err);
+        })
+      },
+      async initData(){
+        try {
+          let result = await this.$api.reqPayInfo(this.orderId)
+          if(result && result.code == 200){
+            this.payInfo = result.data
+          }else{
+            alert(result.message || '获取支付信息失败')
+            console.error(result);
+          }
+        } catch (error) {
+          alert('获取支付信息失败')
+          console.error(error);
+        }
+      }
+    }
   }
 </script>
 
