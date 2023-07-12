@@ -36,6 +36,7 @@ const router = new VueRouter({
 //          next({
 //            path: '/login'
 //          })
+//          next(false) 不做任何操作,还呆在当前路由
 //      当传参的时候 next('/login') 不管你原来去哪,现在执行 next('/login'),都去login
 router.beforeEach(async function (to, from, next) {
 // debugger

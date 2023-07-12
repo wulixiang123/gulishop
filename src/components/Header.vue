@@ -10,7 +10,10 @@
           <p>
             <span>欢迎&nbsp;&nbsp;</span>
             <a href="javascript:;">{{ $store.state.user.userInfo.name }}</a>
-            <a href="javascript:;" class="register">退出登录</a>
+            <a href="javascript:;" 
+            class="register"
+            @click="logoutHandler"
+            >退出登录</a>
           </p>
         </div>
 
@@ -74,6 +77,11 @@ export default {
     }
   },
   methods: {
+    // 退出登录
+    logoutHandler(){
+      this.$store.dispatch('user/logout')
+    },
+    // 去搜索页
     toSearch() {
 
       // 测试带参 - params和query都测试, 把keyword传递过去

@@ -1,4 +1,5 @@
 import { reqCode, reqLogin, reqRegister, reqUserInfo } from '@/api'
+import router from '@/router'
 import { getUserTempId } from '@/utils/user'
 
 // 我们把唯一标识放到store中,为什么放到store中?
@@ -24,6 +25,22 @@ const mutations = {
 }
 
 const actions = {
+  // 退出登录
+  async logout({commit,dispatch}){
+    try {
+      await reqLogout()
+    } catch (error) {
+      console.error(error);
+    }finally{// 不管成功失败都要执行
+      if(confirm('确定退出登录吗?')){
+        dispatch('clearToken')// 清除token
+        commit('SET_USERINFO',{})// 清除个人信息
+        router.push('/home')// 跳转首页
+      }else{
+        return
+      }
+    }
+  },
   // 清除token
   clearToken({commit}){
     commit('SET_TOKEN','')// 清除store中的token
