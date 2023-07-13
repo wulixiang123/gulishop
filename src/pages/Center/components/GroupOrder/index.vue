@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>GroupOrder - 团购订单页面</h3>
+    <h3>团购订单页面</h3>
   </div>
 </template>
 
