@@ -1,17 +1,31 @@
-import Home from '@/pages/Home.vue'
-import Login from '@/pages/Login.vue'
-import Register from '@/pages/Register.vue'
-import Search from '@/pages/Search.vue'
-import Detail from '@/pages/Detail.vue'
-import AddCartSuccess from '@/pages/AddCartSuccess'
-import ShopCart from '@/pages/ShopCart'
-import Trade from '@/pages/Trade'
-import Pay from '@/pages/Pay'
-import PaySuccess from '@/pages/PaySuccess'
-import Center from '@/pages/Center'
-import MyOrder from '@/pages/Center/components/MyOrder'
-import GroupOrder from '@/pages/Center/components/GroupOrder'
+// import Home from '@/pages/Home.vue'
+// import Login from '@/pages/Login.vue'
+// import Register from '@/pages/Register.vue'
+// import Search from '@/pages/Search.vue'
+// import Detail from '@/pages/Detail.vue'
 
+// import AddCartSuccess from '@/pages/AddCartSuccess'
+// import ShopCart from '@/pages/ShopCart'
+// import Trade from '@/pages/Trade'
+// import Pay from '@/pages/Pay'
+// import PaySuccess from '@/pages/PaySuccess'
+// import Center from '@/pages/Center'
+// import MyOrder from '@/pages/Center/components/MyOrder'
+// import GroupOrder from '@/pages/Center/components/GroupOrder'
+
+const Home = () => import( '@/pages/Home.vue')//懒加载
+const Search = () => import( '@/pages/Search.vue')
+const Login = () => import( '@/pages/Login.vue')
+const Register = () => import( '@/pages/Register.vue')
+const Detail = () => import( '@/pages/Detail.vue')
+const AddCartSuccess = () => import( '@/pages/AddCartSuccess')
+const ShopCart = () => import( '@/pages/ShopCart')
+const Trade = () => import( '@/pages/Trade')
+const Pay = () => import( '@/pages/Pay')
+const PaySuccess = () => import( '@/pages/PaySuccess')
+const Center = () => import( '@/pages/Center')
+const MyOrder = () => import( '@/pages/Center/components/MyOrder')
+const GroupOrder = () => import( '@/pages/Center/components/GroupOrder')
 export default[
     {
         path:'/home',
