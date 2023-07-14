@@ -24,8 +24,8 @@
 // 获取到绑定在组件上的所有属性(包括属性值),除了props接收过的属性 和 class 和 style
 // 可以使用 v-bind="$attrs" 将所有接收到的属性直接绑定在元素上,这样就不需要一个一个接收的绑定了
 // $listeners
-// 接收所有绑定在组建上的事件
-// 可以用于直接给子组件中某个绑定事件,绑定的事件是写在组件标签上的事件
+// 接收所有绑定在组件上的事件--只执行click事件,其它事件不执行
+// 可以用于直接给子组件中某个元素绑定事件,绑定的事件是写在组件标签上的事件
 import HintButton from './HintButton.vue'
 export default {
     name: "AttrsListenersTest",
@@ -36,7 +36,7 @@ export default {
         },
         abcHandler() {
             console.log('触发了组件的abc')
-        }
+        },
     }
 }
 </script>

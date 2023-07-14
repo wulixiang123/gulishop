@@ -6,9 +6,10 @@ import Vue from 'vue';
 // 按需引入
 // 按需引入的组件分为两种情况
 import 'element-ui/lib/theme-chalk/index.css';
-import { Button, MessageBox, Message } from 'element-ui';
+import { Button, MessageBox, Message,Popover  } from 'element-ui';
 // 大多数组件通过 Vue.component 或 Vue.use 可以使用
 Vue.component(Button.name, Button); // --> Vue.use(Button)
+Vue.component(Popover.name, Popover); // --> Vue.use(Popover)
 // 只有少部分组件需要挂载Vue的原型上
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
