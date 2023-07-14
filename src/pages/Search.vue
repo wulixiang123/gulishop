@@ -93,7 +93,9 @@
                   <div class="p-img">
 
                     <router-link :to="`/detail/${goods.id}`">
-                      <img :src="goods.defaultImg"/>
+                      <!-- <img :src="goods.defaultImg"/> -->
+                      <!-- 图片懒加载 -->
+                      <img v-lazy="goods.defaultImg"/>
                     </router-link>
 
                     <!-- <a href="javascript:;">
