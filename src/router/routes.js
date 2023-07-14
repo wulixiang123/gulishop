@@ -26,7 +26,12 @@ const PaySuccess = () => import( '@/pages/PaySuccess')
 const Center = () => import( '@/pages/Center')
 const MyOrder = () => import( '@/pages/Center/components/MyOrder')
 const GroupOrder = () => import( '@/pages/Center/components/GroupOrder')
+
+import Communication from './communication-route'
 export default[
+    {
+        ...Communication
+    },
     {
         path:'/home',
         component:Home
