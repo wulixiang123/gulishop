@@ -84,8 +84,18 @@ router.beforeEach(async function (to, from, next) {
     // next('/login')  不能直接跳转/login,会死循环
     next()// 目前先直接放行,等后续再改这块
     
-    // 这里没有token不能直接去login,会死循环,目前先放行,后续在加条件
-    // next('/login')
+    // 需求1: 交易、支付、支付成功、个人中心必须登录才能访问,不能直接放行
+    // 创建一个黑名单,在黑名单数组中的页面必须登录
+    // 需求2: 跳转的页面在黑名单当中,此时跳转登录页,当登录成功之后,去到刚刚想去而没有去到的页面
+    // 例如:  /trade -> /login 当登录之后,还跳转到 /trade
+
+    let blackList = ['/trade','/pay','/paysuccess','/center']
+    if(blackList.some(item=>to.path.includes(item))){
+      alert('请先登录')
+      next(`/login?redirect=${to.path}`)
+    }else{
+      next()
+    }
 
   }
   // next('/login') 不能直接跳转到login,因为url变化,只要路由变化就会重新走守卫,造成死循环

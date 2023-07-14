@@ -141,7 +141,8 @@ export default {
         })
         // // 获取个人信息
         // this.getUserInfo()
-        this.$router.push('/home')
+        let path = this.$route.query.redirect || '/home'
+        this.$router.push(path)
   
         // 去首页,要展示个人信息 目前没有个人信息,在路由守卫中获取个人信息
         
