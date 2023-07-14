@@ -33,7 +33,16 @@ export default[
         path:'/addCartSuccess/:skuNum?',
         component:AddCartSuccess,
         // path区分大小写(默认false)
-        caseSensitive: true
+        caseSensitive: true,
+        // 独享守卫 - 只有携带了skuNum和sessionStorage内部有skuInfo数据  才能看到添加购物车成功的界面
+        beforeEnter:(to,from,next) => {
+            if(to.params.skuNum && sessionStorage.getItem('GOODSINFO')){
+                next()
+            }else{
+                alert('必须携带商品数量和商品信息才可以访问该页面')
+                next(false)
+            }
+        }
     },
     {
         path:'/shopcart',
@@ -41,11 +50,29 @@ export default[
     },
     {
         path:'/trade',
-        component:Trade
+        component:Trade,
+        // 只有从购物车界面才能跳转到交易页面(/trade) (兼容一下login)
+        beforeEnter:(to,from,next) => {
+            if(from.path.includes('/shopcart') || from.path.includes('/login')){
+                next()
+            }else{
+                alert('只能从购物车页面跳转交易页面')
+                next(false)
+            }
+        }
     },
     {
         path:'/pay',
-        component:Pay
+        component:Pay,
+        // 只有从交易页面（创建订单）页面才能跳转到支付页面
+        beforeEnter: (to, from, next) => {
+        if ( from.path.includes('/trade') ) {
+                next()
+            } else {
+              alert('只能从交易页面页面跳转支付页面')
+                next(false)
+            }
+        }
     },
     {
         path:'/paysuccess',

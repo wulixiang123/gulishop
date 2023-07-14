@@ -448,8 +448,8 @@ export default {
         // 但是没有发请求,数据都是从 当前detail页面携带过去
         // 数量通过 路由的 params 参数携带
         // 商品信息通过 sessionStorage 携带
-        this.$router.push(`/addCartSuccess/${ this.goodsNum }`)
         sessionStorage.setItem('GOODSINFO', JSON.stringify(this.skuInfo))
+        this.$router.push(`/addCartSuccess/${ this.goodsNum }`)
 
 
         // localStorage 和 sessionStorage
