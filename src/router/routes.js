@@ -62,7 +62,7 @@ export default[
         }
     },
     {
-        path:'/pay',
+        path:'/pay',    
         component:Pay,
         // 只有从交易页面（创建订单）页面才能跳转到支付页面
         beforeEnter: (to, from, next) => {
