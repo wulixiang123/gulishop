@@ -10,12 +10,38 @@
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号" v-model="userinfo.phone"/>
-        <span class="error-msg">错误提示信息</span>
+        <!--
+        <input v-model="mobile" name="phone" v-validate="{required: true,regex: /^1\d{10}$/}" 
+          :class="{invalid: errors.has('phone')}">
+        <span class="error-msg">{{ errors.first('phone') }}</span>
+
+        name="qwer" 设置当前这个input框校验的字段是哪个名称(规定校验哪个字段)
+        v-validate="{required: true,regex: /^1\d{10}$/}"
+                    使用指令添加规则 required 必填  regex正则
+        :class="{ invalid: errors.has('qwer') }"
+                  动态绑定类名 invalid
+                  errors.has('qwer')
+                  errors 是一个错误对象,这个对象上可以调用has这个方法,判断错误对象中有没有关于 qwer的校验
+        
+        errors.first('qwer')
+                  去error这个对象中找 qwer 这个字段的第一个错误信息进行展示
+        -->
+
+        <!-- <div>{{ errors }}</div> -->
+        <input type="text" placeholder="请输入你的手机号" v-model="userinfo.phone"
+          name="phone"
+          v-validate="{required: true,regex: /^1\d{10}$/}"
+          :class="{ invalid: errors.has('phone') }"
+        />
+        <span class="error-msg">{{ errors.first('phone') }}</span>
       </div>
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码" v-model="userinfo.code"/>
+        <input type="text" placeholder="请输入验证码" v-model="userinfo.code"
+          name="code"
+          v-validate="{ required: true }"
+          :class="{ invalid: errors.has('code') }"
+        />
         <button 
         style="height: 38px;padding: 0 10px;" 
         @click="getCodeHandler"
@@ -27,18 +53,30 @@
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码" v-model="userinfo.password"/>
-        <span class="error-msg">错误提示信息</span>
+        <input type="text" placeholder="请输入你的登录密码" v-model="userinfo.password"
+          name="password"
+          v-validate="{ required: true }"
+          :class="{ invalid: errors.has('password') }"
+        />
+        <span class="error-msg">{{ errors.first('password') }}</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码" v-model="userinfo.repassword"/>
-        <span class="error-msg">错误提示信息</span>
+        <input type="text" placeholder="请输入确认密码" v-model="userinfo.repassword"
+          name="repassword"
+          v-validate="{ required: true, is: userinfo.password }"
+          :class="{ invalid: errors.has('repassword') }"
+        />
+        <span class="error-msg">{{ errors.first('repassword') }}</span>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox" v-model="userinfo.isAgree"/>
+        <input type="checkbox" v-model="userinfo.isAgree"
+          name="isAgree"
+          v-validate="{ required: true }"
+          :class="{ invalid: errors.has('isAgree') }"
+        />
         <span>同意协议并注册《尚品汇用户协议》</span>
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ errors.first('isAgree') }}</span>
       </div>
       <div class="btn">
         <button @click="registerHandler">完成注册</button>
@@ -146,6 +184,11 @@ export default {
 
 <style lang="less" scoped>
 .register-container {
+  
+  .invalid {
+    border: 1px solid #e1251b!important;
+  }
+
   .register {
     width: 1200px;
     height: 445px;
