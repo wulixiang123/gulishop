@@ -3,9 +3,9 @@
         <h1>组件间通信7: $refs & $children & $parent</h1>
 
         <p>BABA有存款: {{ money }}</p>
-        <button>找儿子借钱100</button><br />
-        <button>找女儿借钱150</button><br />
-        <button>找所有孩子借钱200</button><br />
+        <button @click="borrowMoneyFromXM">找儿子借钱100</button><br />
+        <button @click="borrowMoneyFromXH">找女儿借钱150</button><br />
+        <button @click="borrowMoneyFromChild">找所有孩子借钱200</button><br />
 
         <br />
         <Son ref="son" />
@@ -29,6 +29,22 @@ export default {
         Son,
         Daughter,
     },
+    methods:{
+        borrowMoneyFromXM(){
+            this.$refs.son.money -= 100
+            this.money += 100
+        },
+        borrowMoneyFromXH(){
+            this.$refs.daughter.money -= 150
+            this.money += 150
+        },
+        borrowMoneyFromChild(){
+            this.$children.forEach(child =>{
+                child.money -= 100
+            })
+            this.money += 200
+        }
+    }
 };
 </script>
 

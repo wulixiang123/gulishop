@@ -1,7 +1,7 @@
 <template>
     <div class="box">
         <h3>儿子小明: 有存款: {{ money }}</h3>
-        <button>给BABA钱: 50</button>
+        <button @click="giveMoney">给BABA钱: 50</button>
     </div>
 </template>
 
@@ -13,5 +13,11 @@ export default {
             money: 30000
         }
     },
+    methods:{
+        giveMoney(){
+            this.money -= 50
+            this.$parent.money += 50
+        }
+    }
 }
 </script>
